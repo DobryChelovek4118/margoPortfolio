@@ -1,0 +1,156 @@
+/**
+ * Переменные: цвета и отступы
+ * Подключать перед style.css
+ */
+
+:root {
+    /* ========== ЦВЕТА ========== */
+    --color-bg: hsl(210, 17%, 98%);                      /* #F8F9FA */
+    --color-text: hsla(0, 0%, 0%, 0.86);                 /* rgba(0, 0, 0, 0.86) */
+    --color-text-muted: hsla(0, 0%, 0%, 0.65);           /* rgba(0, 0, 0, 0.65) */
+    --color-border: hsl(0, 0%, 83%);                     /* #d4d4d4 */
+    --color-border-light: hsl(0, 0%, 90%);               /* #e5e5e5 */
+    --color-black: hsl(210, 9%, 31%);                    /* #495057 */
+    --color-white: hsl(0, 0%, 100%);                     /* #ffffff */
+    --color-accent-dark: hsl(225, 7%, 19%);              /* #2f3033 */
+
+    /* Подвал */
+    --color-footer-bg: hsl(210, 9%, 31%);                /* #495057 */
+    --color-footer-text: hsla(0, 0%, 100%, 0.98);        /* rgba(255, 255, 255, 0.98) */
+    --color-footer-link: hsla(0, 0%, 100%, 0.65);        /* rgba(255, 255, 255, 0.65) */
+
+    /* Курсор */
+    --color-cursor-bg: hsl(0, 0%, 100%);                 /* #ffffff */
+    --color-cursor-text: hsl(210, 9%, 31%);              /* #495057 */
+
+    /* ========== ТИПОГРАФИКА: базовая шкала ========== */
+    --font-size-9: 9px;
+    --font-size-12: 12px;
+    --font-size-14: 14px;
+    --font-size-16: 16px;
+    --font-size-18: 18px;
+    --font-size-20: 20px;
+    --font-size-24: 24px;
+    --font-size-28: 28px;
+    --font-size-30: 30px;
+    --font-size-32: 32px;
+    --font-size-42: 42px;
+
+    /* ========== ТИПОГРАФИКА: семантика ========== */
+    /* Меняй здесь — изменится везде */
+    --font-micro: var(--font-size-9);       /* курсор */
+    --font-small: var(--font-size-12);      /* мета, примечания */
+    --font-body: var(--font-size-14);       /* основной текст */
+    --font-subheading: var(--font-size-16);  /* подзаголовки секций: АУДИТОРИЯ, ЦЕЛЬ, ЗАДАЧИ */
+    --font-heading-sm: var(--font-size-18); /* заголовки, должности */
+    --font-heading-md: var(--font-size-24); /* заголовки карточек и секций */
+    --font-heading-lg: var(--font-size-28); /* about, крупные блоки */
+    --font-heading-xs: var(--font-size-20);  /* адаптивные заголовки ≤1024px */
+    --font-display-xs: var(--font-size-32);  /* герой-линия на ≤768px */
+    --font-display-md: var(--font-size-32);  /* футер на ≤1024px */
+    --font-display-lg-adapt: var(--font-size-32); /* герой на ≤1024px */
+    --font-display-sm: var(--font-size-42); /* футер desktop */
+    --font-display-lg: var(--font-size-42); /* герой desktop */
+
+    /* ========== ТИПОГРАФИКА: ритм/трекинг (использовать в style.css) ========== */
+    --lh-heading: 130%;
+    --lh-body: 130%;
+    --lh-caption: 130%;
+    --tracking-base: 0.05em;
+
+    /* ========== ОТСТУПЫ ========== */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 12px;
+    --space-base: 16px;
+    --space-xl: 24px;
+    --space-2xl: 32px;
+    --space-4xl: 40px;
+    --space-5xl: 46px;
+    --space-8xl: 60px;
+    --space-10xl: 80px;
+    --space-12xl: 100px;
+    --space-hero-pt: 242px;
+
+    /* Контейнер */
+    --container-padding: 36px;
+    --container-padding-md: 32px;
+    --container-padding-sm: 28px;
+    --container-max: 1440px;
+
+    /* Сетка */
+    --layout-gap: 45px;
+    --layout-gap-md: 24px;
+    --layout-aside: 310px;
+
+    /* Шапка */
+    --header-padding-y: 18px;
+    --header-height: 56px;
+
+    /* Секции */
+    --section-padding-y: var(--space-4xl);         /* 40px */
+    --section-padding-bottom: var(--space-12xl);   /* 100px */
+    --about-padding-top: 116px;
+    --work-padding-top: var(--space-12xl);         /* 100px */
+    --footer-padding-y: var(--space-8xl);          /* 60px */
+    --footer-padding-bottom: var(--space-12xl);    /* 100px */
+    --footer-links-gap: var(--space-12xl);         /* 100px */
+    --footer-links-margin-top: var(--space-12xl);  /* 100px */
+
+    /* Проект / карточки */
+    --project-content-max: 350px;
+    --project-content-max-md: 400px;
+    --project-content-max-wide: 600px;
+    --project-meta-gap: 20px;
+    --project-meta-padding-y: 16px;
+    --project-text-margin-top: 10px;
+    --project-text-margin-bottom: 24px;
+    --experience-item-margin-bottom: 48px;
+    --experience-item-padding-bottom: 48px;
+    --experience-sticky-top: 100px;
+
+    /* Страница кейса */
+    --project-page-padding-top: 120px;
+    --project-page-hero-padding-y: 40px;
+    --project-page-hero-padding-bottom: 60px;
+    --project-page-content-padding-y: 40px;
+    --project-page-media-padding-y: 40px;
+    --project-page-meta-margin-top: 24px;
+    --project-page-title-max: 600px;
+    --project-page-placeholder-min-height: 200px;
+
+    /* Герой */
+    --hero-location-bottom: 15px;
+    --hero-year-right: 20px;
+    --hero-padding-top-lg: 160px;
+    --hero-padding-top-md: 120px;
+    --hero-padding-top-sm: 100px;
+
+    /* Хедер и бургер-меню */
+    --header-burger-gap: 6px;
+    --header-burger-size: 32px;
+    --header-burger-line-height: 2px;
+    --header-burger-line-offset: 4px;
+    --header-nav-padding-y-md: 60px;
+
+    /* Блок "Обо мне" */
+    --about-img-max-width: 250px;
+    --about-img-max-height: 350px;
+    --about-img-max-width-md: 200px;
+    --about-img-max-height-md: 280px;
+
+    /* Опыт и кейсы */
+    --experience-item-max-width: 600px;
+
+    /* Футер */
+    --footer-title-max-width: 720px;
+    --footer-item-max-width: 220px;
+    --footer-label-arrow-margin-left: 2px;
+
+    /* Кастомный курсор */
+    --cursor-size: 30px;
+
+    /* Радиусы медиа */
+    --radius-media-home: 16px;      /* главная страница, desktop */
+    --radius-media-mobile: 16px;    /* все медиа на мобильных */
+}

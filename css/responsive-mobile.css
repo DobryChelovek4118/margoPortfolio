@@ -1,0 +1,138 @@
+/* ==================== АДАПТИВ: мобильные (≤768px, ≤480px) ==================== */
+
+@media (max-width: 768px) {
+    .header {
+        padding: var(--space-base) 0;
+    }
+
+    .header .layout {
+        grid-template-columns: 1fr auto;
+    }
+
+    .hero__title {
+        padding-top: var(--hero-padding-top-md);
+        font-size: var(--font-heading-lg);
+    }
+
+    .hero__location,
+    .hero__year {
+        position: static;
+        margin-top: var(--space-xl);
+        display: block;
+    }
+
+    .hero__year {
+        text-align: left;
+    }
+
+    .project__title {
+        font-size: var(--font-heading-sm);
+    }
+
+    .project__text {
+        font-size: var(--font-body);
+    }
+
+    .about__text {
+        font-size: var(--font-heading-xs);
+    }
+
+    .footer__title {
+        font-size: var(--font-heading-md);
+    }
+
+    .footer__links {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: var(--space-2xl);
+        margin-top: var(--space-4xl);
+    }
+
+    .footer__item:nth-child(1),
+    .footer__item:nth-child(2),
+    .footer__item:nth-child(3),
+    .footer__item:nth-child(4) {
+        grid-column: 1;
+        grid-row: auto;
+    }
+
+    .footer__item:nth-child(4) {
+        margin-top: var(--space-base);
+        padding-left: 0;
+    }
+
+    .project-page__hero {
+        padding: var(--space-xl) 0 var(--space-4xl);
+    }
+
+    .project-page__content {
+        padding: var(--space-xl) 0;
+    }
+
+    .project-page__media {
+        padding: var(--space-xl) 0;
+    }
+
+    .project-page__back {
+        font-size: var(--font-small);
+    }
+
+    .hero__year,
+    .footer__year {
+        display: none;
+    }
+
+    /* Медиа: на мобильных радиус 16px через переменную */
+    img,
+    .about__media .about__img,
+    .work .project__media-poster,
+    .work .project__media img,
+    video,
+    .project__media video,
+    .project-page__media-inner,
+    .project-page__media-inner video,
+    .project-page__media-inner img {
+        border-radius: var(--radius-media-mobile);
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 var(--container-padding-sm);
+    }
+
+    .project-page__media .container {
+        padding-left: var(--container-padding-sm);
+        padding-right: var(--container-padding-sm);
+    }
+
+    .work .container {
+        padding-left: var(--container-padding-sm);
+        padding-right: var(--container-padding-sm);
+    }
+
+    .hero__title {
+        padding-top: var(--hero-padding-top-sm);
+        font-size: var(--font-heading-xs);
+    }
+
+    .nav__list {
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+
+    .footer__title {
+        font-size: var(--font-heading-xs);
+    }
+
+    .project-page__title {
+        font-size: var( --font-heading-sm);
+    }
+
+    .project__meta-item {
+        grid-template-columns: 1fr;
+        gap: var(--space-xs);
+        font-size: var(--font-body);
+    }
+}
+

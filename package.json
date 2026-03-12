@@ -1,0 +1,15 @@
+{
+  "name": "portfoliomy",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "check:assets": "node scripts/check-assets.mjs",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5",
+    "vite": "^6.2.0"
+  }
+}

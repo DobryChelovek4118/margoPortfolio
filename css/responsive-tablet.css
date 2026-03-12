@@ -1,0 +1,266 @@
+/* ==================== АДАПТИВ: планшеты (≤1024px) ==================== */
+
+@media (max-width: 1024px) {
+    .header .layout {
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: var(--space-base);
+    }
+
+    .header__burger {
+        display: flex;
+        margin-left: 0;
+    }
+
+    .header__nav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--space-2xl);
+        background: var(--color-bg);
+        margin: 0;
+        padding: var(--header-nav-padding-y-md) var(--container-padding-md);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.25s, visibility 0.25s;
+        z-index: 50;
+    }
+
+    .header--menu-open .header__nav {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    .header--menu-open .header__nav .nav,
+    .header--menu-open .header__nav .nav__list {
+        display: contents;
+    }
+
+    .header--menu-open .header__nav .nav__item,
+    .header--menu-open .header__nav .header__contact {
+        display: block;
+        text-align: center;
+        margin: 0;
+    }
+
+    .header--menu-open .header__nav .nav__link,
+    .header--menu-open .header__nav .header__contact {
+        display: inline-block;
+        font-family: 'Involve', sans-serif;
+        font-size: var(--font-body);
+        font-weight: 700;
+        letter-spacing: var(--tracking-base);
+        text-transform: uppercase;
+        text-decoration: none;
+        color: var(--color-text);
+    }
+
+    .header--menu-open .header__nav .header__contact {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .layout {
+        grid-template-columns: 1fr;
+        gap: var(--layout-gap-md);
+    }
+
+    .header .layout {
+        grid-template-columns: 1fr auto;
+    }
+
+    .container {
+        padding: 0 var(--container-padding-md);
+    }
+
+    .hero__title {
+        padding-top: var(--hero-padding-top-lg);
+        font-size: var(--font-display-lg-adapt);
+    }
+
+    .work .container {
+        box-sizing: border-box;
+        width: 100%;
+        padding-left: var(--container-padding-md);
+        padding-right: var(--container-padding-md);
+    }
+
+    .work {
+        padding-top: var(--space-10xl);
+        padding-bottom: var(--space-10xl);
+    }
+
+    /* ——— Проекты: адаптив ——— */
+    .work .project {
+        flex-direction: column;
+        gap: var(--layout-gap-md);
+    }
+
+    .work .project .layout__main {
+        min-width: 0; /* позволяет контенту сжиматься в grid */
+    }
+
+    .project__content {
+        max-width: var(--project-content-max-md);
+    }
+
+    .work .project__media {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .work .project__media a {
+        display: block;
+        width: 100%;
+    }
+
+    /* На адаптиве показываем фото вместо видео */
+    .work .project__media-poster {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        border-radius: 2rem;
+    }
+
+    .work .project__media video {
+        display: none;
+    }
+
+    .work .project {
+        margin-bottom: var(--space-8xl);
+    }
+
+    .work .project:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Видео на страницах кейсов */
+    .project-page__media .container {
+        padding-left: var(--container-padding-md);
+        padding-right: var(--container-padding-md);
+    }
+
+    .project-page__media-inner {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        border-radius: 2rem;
+        overflow: hidden;
+    }
+
+    .project-page__media-inner video,
+    .project-page__media-inner img {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        object-fit: cover;
+        display: block;
+    }
+    
+    .project-page__content {
+        padding: var(--space-xl) 0;
+        margin-top: calc(var(--space-xl) * 2);
+    }
+
+    .project-page__media {
+        padding: var(--space-xl) 0;
+        margin-top: calc(var(--space-xl) * 2);
+    }
+
+    .project-page__media.project-page__media--compact {
+        margin-top: var(--space-xl);
+    }
+
+    .project__text p + .project-page__subheading,
+    .project-page__list + .project-page__subheading {
+        margin-top: calc(var(--space-xl) * 2);
+    }
+
+    .about__text {
+        width: 100%;
+        font-size: var(--font-heading-md);
+    }
+
+    .about__media .about__img {
+        max-width: var(--about-img-max-width-md);
+        max-height: var(--about-img-max-height-md);
+    }
+
+    .experience__title {
+        position: static;
+        max-width: var(--project-content-max-md);
+        font-size: var(--font-heading-xs);
+    }
+
+    .experience-card__position {
+        font-size: var(--font-heading-xs);
+    }
+
+    .project__title {
+        font-size: var(--font-heading-xs);
+    }
+
+    .experience__item,
+    .experience__list {
+        max-width: var(--project-content-max-md);
+    }
+
+    .footer__title {
+        font-size: var(--font-display-md);
+    }
+
+    .footer__wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-4xl);
+    }
+
+    .footer__links {
+        grid-template-columns: repeat(3, auto);
+        gap: var(--space-4xl) var(--footer-links-gap);
+        margin-top: var(--space-8xl);
+    }
+
+    .footer__item:nth-child(4) {
+        margin-top: var(--space-xl);
+        padding-left: 0;
+    }
+
+    .project-page {
+        padding-top: var(--space-12xl);
+    }
+
+    .project-page__title {
+        font-size: var( --font-heading-sm);
+    }
+
+    .project-page__heading {
+        position: static;
+    }
+
+    .project-page__content .layout__aside {
+        grid-column: auto;
+        grid-row: auto;
+        order: 1;
+    }
+
+    .project-page__content .layout__main {
+        grid-column: auto;
+        grid-row: auto;
+        order: 2;
+    }
+
+    .project__meta-item {
+        grid-template-columns: 1fr 2fr;
+    }
+}
+
