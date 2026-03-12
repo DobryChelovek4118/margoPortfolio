@@ -171,6 +171,7 @@ body.page--project {
     width: 100%;
     max-width: 100%;
     margin: 0;
+    min-height: var(--project-page-placeholder-min-height);
     border-radius: 2rem;
     overflow: hidden;
 }
@@ -182,6 +183,7 @@ body.page--project {
     max-width: 100%;
     height: auto;
     object-fit: cover;
+    aspect-ratio: 16 / 9;
     border-radius: 2rem;
 }
 
