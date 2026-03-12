@@ -528,7 +528,9 @@ function initHomeMediaFallback() {
 // ==================== МОДАЛКА ДЛЯ МЕДИА НА СТРАНИЦАХ ПРОЕКТОВ ====================
 
 function initProjectMediaModal() {
+    // Модальное просмотр медиа оставляем только на мобильных устройствах
     if (!document.body.classList.contains('page--project')) return;
+    if (!isMobileDevice()) return;
 
     const mediaElements = document.querySelectorAll('.project-page__media-inner img, .project-page__media-inner video');
     if (!mediaElements.length) return;
