@@ -111,6 +111,21 @@
         padding-right: var(--container-padding-sm);
     }
 
+    /* Страницы проектов: ещё меньше вертикальные отступы между медиа и текстом */
+    .project-page__content {
+        padding: calc(var(--space-xl) / 2) 0;
+        margin-top: var(--space-xl);
+    }
+
+    .project-page__media {
+        padding: calc(var(--space-xl) / 2) 0;
+        margin-top: var(--space-xl);
+    }
+
+    .project-page__media.project-page__media--compact {
+        margin-top: calc(var(--space-xl) / 2);
+    }
+
     .hero__title {
         padding-top: var(--hero-padding-top-sm);
         font-size: var(--font-heading-xs);

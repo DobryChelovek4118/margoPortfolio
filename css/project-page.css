@@ -26,7 +26,6 @@ body.page--project {
     font-size: var(--font-heading-md);
     line-height: var(--lh-heading);
     letter-spacing: var(--tracking-base);
-    text-transform: uppercase;
     color: var(--color-text);
     max-width: var(--project-page-title-max);
 }
@@ -53,7 +52,6 @@ body.page--project {
     font-weight: 700;
     font-size: var(--font-body);
     letter-spacing: var(--tracking-base);
-    text-transform: uppercase;
     color: var(--color-text);
     text-decoration: none;
     transition: color 0.2s;
@@ -118,7 +116,7 @@ body.page--project {
     line-height: var(--lh-caption);
     letter-spacing: var(--tracking-base);
     color: var(--color-text-muted);
-    margin-top: var(--space-xl);
+    margin-top: var(--space-base);
     text-align: center;
     max-width: var(--project-content-max-wide);
     margin-left: auto;
@@ -140,7 +138,6 @@ body.page--project {
     font-size: var(--font-heading-sm);
     line-height: var(--lh-heading);
     letter-spacing: var(--tracking-base);
-    text-transform: uppercase;
     color: var(--color-text);
 }
 
@@ -194,7 +191,6 @@ body.page--project {
     font-size: var(--font-subheading);
     line-height: var(--lh-heading);
     letter-spacing: var(--tracking-base);
-    text-transform: uppercase;
     color: var(--color-text);
     margin-top: var(--space-xl);
     margin-bottom: var(--space-xl);
@@ -366,6 +362,17 @@ body.page--project {
     padding: var(--space-xs) var(--space-base);
     background: rgba(0, 0, 0, 0.6);
     border-radius: 999px;
+}
+
+@media (max-width: 768px) {
+    .project-media-modal__caption {
+        left: 4vw;
+        right: 4vw;
+        bottom: var(--space-base);
+        transform: none;
+        max-width: none;
+        border-radius: 16px;
+    }
 }
 
 @media (min-width: 1025px) {

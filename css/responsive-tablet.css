@@ -58,7 +58,6 @@
         font-size: var(--font-body);
         font-weight: 700;
         letter-spacing: var(--tracking-base);
-        text-transform: uppercase;
         text-decoration: none;
         color: var(--color-text);
     }
@@ -198,7 +197,7 @@
     .experience__title {
         position: static;
         max-width: var(--project-content-max-md);
-        font-size: var(--font-heading-xs);
+        font-size: var(--font-heading-md);
     }
 
     .experience-card__position {

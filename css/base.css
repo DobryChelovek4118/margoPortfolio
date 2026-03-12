@@ -80,7 +80,6 @@ body::-webkit-scrollbar {
     font-size: var(--font-body);
     line-height: var(--lh-heading);
     letter-spacing: var(--tracking-base);
-    text-transform: uppercase;
     color: var(--color-text);
     background-color: var(--color-bg);
     z-index: 100;
@@ -211,7 +210,6 @@ body::-webkit-scrollbar {
     font-size: var(--font-heading-md);
     line-height: 128%;
     letter-spacing: 0.04em;
-    text-transform: uppercase;
     color: var(--color-text);
 }
 
@@ -247,6 +245,10 @@ body::-webkit-scrollbar {
     line-height: var(--lh-body);
     letter-spacing: var(--tracking-base);
     color: var(--color-text);
+}
+
+.project__meta-label {
+    font-weight: 700;
 }
 
 .about__wrapper {
@@ -298,7 +300,6 @@ body::-webkit-scrollbar {
     font-weight: 700;
     font-size: var(--font-body);
     letter-spacing: var(--tracking-base);
-    text-transform: uppercase;
     color: var(--color-text-muted);
 }
 
@@ -337,7 +338,6 @@ body::-webkit-scrollbar {
     font-size: var(--font-heading-md);
     line-height: var(--lh-heading);
     letter-spacing: var(--tracking-base);
-    text-transform: uppercase;
     color: var(--color-text);
     position: sticky;
     top: var(--experience-sticky-top);
@@ -359,7 +359,6 @@ body::-webkit-scrollbar {
     font-size: var(--font-heading-sm);
     line-height: var(--lh-heading);
     letter-spacing: var(--tracking-base);
-    text-transform: uppercase;
     color: var(--color-text);
 }
 
@@ -565,7 +564,6 @@ body {
 .cursor__text {
     font-size: var(--font-micro);
     font-weight: 600;
-    text-transform: uppercase;
     letter-spacing: var(--tracking-base);
     color: var(--color-cursor-text);
     opacity: 0;
