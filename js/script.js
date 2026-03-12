@@ -1,12 +1,3 @@
-// Страницы проектов: всегда открываться с начала
-if (document.body.classList.contains('page--project')) {
-    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    window.scrollTo(0, 0);
-    window.addEventListener('load', function () {
-        window.scrollTo(0, 0);
-    });
-}
-
 const mail = document.querySelector('.footer__email');
 if (mail) mail.addEventListener('click', () => {
     const user = mail.dataset.user;
@@ -18,15 +9,6 @@ if (mail) mail.addEventListener('click', () => {
 // ==================== ОПРЕДЕЛЕНИЕ МОБИЛЬНОГО УСТРОЙСТВА ====================
 
 function isMobileDevice() {
-    // Проверяем по ширине экрана (обычно 768px и меньше - мобильные)
-    if (window.innerWidth <= 768) return true;
-
-    // Дополнительные проверки
-    if ('ontouchstart' in window) return true;
-    if (navigator.maxTouchPoints > 0) return true;
-    if (navigator.msMaxTouchPoints > 0) return true;
-
-    // Проверка User Agent (опционально)
     const userAgent = navigator.userAgent.toLowerCase();
     const mobileKeywords = [
         'android',

@@ -28,6 +28,17 @@ function webpBuildPlugin() {
         return files
     }
 
+    function copyDir(srcDir, destDir) {
+        if (!fs.existsSync(srcDir)) return
+        fs.mkdirSync(destDir, { recursive: true })
+        for (const entry of fs.readdirSync(srcDir, { withFileTypes: true })) {
+            const srcPath = path.join(srcDir, entry.name)
+            const destPath = path.join(destDir, entry.name)
+            if (entry.isDirectory()) copyDir(srcPath, destPath)
+            else fs.copyFileSync(srcPath, destPath)
+        }
+    }
+
     function replaceImgUrlsToWebp(html) {
         // Replace only when the corresponding .webp exists.
         // Supports absolute (/img/...) and relative (../img/...) paths.
@@ -48,11 +59,22 @@ function webpBuildPlugin() {
         apply: 'build',
         async buildStart() {
             const imgDir = path.resolve(__dirname, 'img')
-            if (!fs.existsSync(imgDir)) return
-            const allFiles = walkDir(imgDir)
-            for (const absPath of allFiles) {
-                // eslint-disable-next-line no-await-in-loop
-                await ensureWebpForFile(absPath)
+            if (fs.existsSync(imgDir)) {
+                const allFiles = walkDir(imgDir)
+                for (const absPath of allFiles) {
+                    // eslint-disable-next-line no-await-in-loop
+                    await ensureWebpForFile(absPath)
+                }
+            }
+
+            // Копируем ассеты в dist/, чтобы они реально попали на прод
+            const outDir = path.resolve(__dirname, 'dist')
+            if (fs.existsSync(imgDir)) {
+                copyDir(imgDir, path.join(outDir, 'img'))
+            }
+            const resourceDir = path.resolve(__dirname, 'resource')
+            if (fs.existsSync(resourceDir)) {
+                copyDir(resourceDir, path.join(outDir, 'resource'))
             }
         },
         transformIndexHtml: {

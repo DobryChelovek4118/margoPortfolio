@@ -110,7 +110,7 @@
     --experience-sticky-top: 100px;
 
     /* Страница кейса */
-    --project-page-padding-top: 0px;
+    --project-page-padding-top: var(--header-height);
     --project-page-hero-padding-y: 40px;
     --project-page-hero-padding-bottom: 60px;
     --project-page-content-padding-y: 40px;
