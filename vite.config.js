@@ -122,7 +122,7 @@ function htmlIncludePlugin() {
 }
 
 export default {
-    base: '/margoPortfolio/',
+    base: '/',
     plugins: [webpBuildPlugin(), htmlIncludePlugin()],
     build: {
         rollupOptions: {
