@@ -64,6 +64,11 @@ const sections = [
     document.querySelector('.footer'),
 ].filter(Boolean);
 
+// На страницах проектов (page--project) отключаем слайд-скролл полностью
+if (document.body.classList.contains('page--project')) {
+    sections.length = 0;
+}
+
 let currentIndex = 0; // Индекс текущей секции
 let isScrolling = false;
 let isInSlideMode = true; // true для hero и work, false для остальных
