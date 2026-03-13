@@ -1,13 +1,9 @@
-// Копия js/script.js для GitHub Pages, кладём в public,
-// чтобы Vite скопировал файл как /js/script.js при билде.
+// ==================== СТРАНИЦЫ ПРОЕКТОВ: ОТКЛЮЧЕНИЕ КАСТОМНОГО СКРОЛЛА ====================
+const isProjectPage = document.body.classList.contains('page--project');
 
-// Страницы проектов: всегда открываться с начала
-if (document.body.classList.contains('page--project')) {
+if (isProjectPage) {
+    // На страницах проектов отключаем стандартное восстановление скролла
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    window.scrollTo(0, 0);
-    window.addEventListener('load', function () {
-        window.scrollTo(0, 0);
-    });
 }
 
 const mail = document.querySelector('.footer__email');
@@ -21,15 +17,6 @@ if (mail) mail.addEventListener('click', () => {
 // ==================== ОПРЕДЕЛЕНИЕ МОБИЛЬНОГО УСТРОЙСТВА ====================
 
 function isMobileDevice() {
-    // Проверяем по ширине экрана (обычно 768px и меньше - мобильные)
-    if (window.innerWidth <= 768) return true;
-
-    // Дополнительные проверки
-    if ('ontouchstart' in window) return true;
-    if (navigator.maxTouchPoints > 0) return true;
-    if (navigator.msMaxTouchPoints > 0) return true;
-
-    // Проверка User Agent (опционально)
     const userAgent = navigator.userAgent.toLowerCase();
     const mobileKeywords = [
         'android',
@@ -53,8 +40,8 @@ window.addEventListener('resize', () => {
 
 // ==================== ПРОСТОЙ И НАДЕЖНЫЙ ПОДХОД ====================
 
-// Все секции в порядке
-const sections = [
+// Все секции в порядке (только для главной страницы)
+const sections = isProjectPage ? [] : [
     document.getElementById('hero'),
     document.getElementById('work-1'),
     document.getElementById('work-2'),
@@ -64,11 +51,6 @@ const sections = [
     document.querySelector('.footer'),
 ].filter(Boolean);
 
-// На страницах проектов (page--project) отключаем слайд-скролл полностью
-if (document.body.classList.contains('page--project')) {
-    sections.length = 0;
-}
-
 let currentIndex = 0; // Индекс текущей секции
 let isScrolling = false;
 let isInSlideMode = true; // true для hero и work, false для остальных
@@ -77,7 +59,7 @@ let lastScrollTime = 0;
 // ==================== БАЗОВЫЕ ФУНКЦИИ ====================
 
 function setScrollLock(locked) {
-    if (document.body.classList.contains('page--project')) return;
+    if (isProjectPage) return;
     if (locked) {
         document.body.style.overflow = 'hidden';
         document.documentElement.style.overflow = 'hidden';
@@ -144,23 +126,31 @@ function scrollToSection(index, instant = false) {
     );
 }
 
-// Проверить, находится ли секция в верхней части экрана
-function isSectionAtTop(sectionIndex) {
-    if (sectionIndex < 0 || sectionIndex >= sections.length) return false;
-    const section = sections[sectionIndex];
-    if (!section) return false;
+// ==================== ИНИЦИАЛИЗАЦИЯ ====================
 
-    const rect = section.getBoundingClientRect();
-    // У "Обо мне" (index 4) учёт scroll-margin-top: секция под хедером, rect.top ~ 56
-    const maxTop = sectionIndex === 4 ? 80 : 50;
-    return rect.top >= -50 && rect.top <= maxTop;
-}
-
-// ==================== ИНИЦИАЛИЗАЦИЯ (только десктоп) ====================
-
-if (sections.length > 0 && !isSmallScreen) {
-    setScrollLock(true); // Начинаем в слайд-режиме
-    scrollToSection(0, true); // Прокручиваем к hero
+if (sections.length > 0 && !isSmallScreen && !isProjectPage) {
+    window.addEventListener('load', () => {
+        // Проверяем, есть ли якорь в URL
+        const hash = window.location.hash.replace('#', '');
+        let targetIndex = 0;
+        
+        if (hash === 'work' || hash === 'work-1') targetIndex = 1;
+        else if (hash === 'work-2') targetIndex = 2;
+        else if (hash === 'work-3') targetIndex = 3;
+        else if (hash === 'about') targetIndex = 4;
+        else {
+            targetIndex = getCurrentSectionIndex();
+        }
+        
+        currentIndex = targetIndex;
+        isInSlideMode = currentIndex < 4;
+        setScrollLock(isInSlideMode);
+        
+        // Если есть якорь, прокручиваем к нужной секции
+        if (hash && sections[targetIndex]) {
+            sections[targetIndex].scrollIntoView({ behavior: 'auto', block: 'start' });
+        }
+    });
 }
 
 // ==================== ОБРАБОТКА НАВИГАЦИИ ====================
@@ -170,9 +160,10 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
         e.preventDefault();
         const targetId = this.getAttribute('href').replace('#', '');
 
-        // Найти индекс целевой секции
         let targetIndex = -1;
-        if (targetId === 'work') targetIndex = 1;
+        if (targetId === 'work' || targetId === 'work-1') targetIndex = 1;
+        else if (targetId === 'work-2') targetIndex = 2;
+        else if (targetId === 'work-3') targetIndex = 3;
         else {
             sections.forEach((section, index) => {
                 if (
@@ -186,14 +177,15 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
         }
 
         if (targetIndex !== -1) {
+            isScrolling = false;
             scrollToSection(targetIndex);
         }
     });
 });
 
-// ==================== ГЛАВНЫЙ ОБРАБОТЧИК СКРОЛЛА (только на главной, только десктоп) ====================
+// ==================== ОБРАБОТЧИК СКРОЛЛА ====================
 
-if (sections.length > 0 && !isSmallScreen) {
+if (sections.length > 0 && !isSmallScreen && !isProjectPage) {
     window.addEventListener(
         'wheel',
         function (e) {
@@ -205,7 +197,7 @@ if (sections.length > 0 && !isSmallScreen) {
 
             currentIndex = getCurrentSectionIndex();
 
-            // ===== РЕЖИМ СЛАЙДОВ (hero и три работы) — перехватываем колёсико =====
+            // Слайд-режим (hero и работы)
             if (isInSlideMode) {
                 e.preventDefault();
                 const direction = e.deltaY > 0 ? 1 : -1;
@@ -220,7 +212,7 @@ if (sections.length > 0 && !isSmallScreen) {
                 return;
             }
 
-            // ===== ОБЫЧНЫЙ РЕЖИМ (about, experience, footer) — пошаговый скролл по секциям =====
+            // Обычный режим (about, experience, footer)
             e.preventDefault();
             const direction = e.deltaY > 0 ? 1 : -1;
             if (direction === 1) {
@@ -243,11 +235,11 @@ if (sections.length > 0 && !isSmallScreen) {
     );
 }
 
-// ==================== ОБНОВЛЕНИЕ СОСТОЯНИЯ ПРИ СКРОЛЛЕ (только на главной, только десктоп) ====================
+// ==================== ОБНОВЛЕНИЕ СОСТОЯНИЯ ====================
 
 let scrollTimeout;
 
-if (sections.length > 0 && !isSmallScreen) {
+if (sections.length > 0 && !isSmallScreen && !isProjectPage) {
     window.addEventListener('scroll', function () {
         if (isScrolling) return;
 
@@ -256,8 +248,6 @@ if (sections.length > 0 && !isSmallScreen) {
             const newIndex = getCurrentSectionIndex();
             if (newIndex !== currentIndex) {
                 currentIndex = newIndex;
-                // Включаем слайд-режим только для hero и work-1, work-2 (0–2), не для work-3,
-                // иначе на границе «Обо мне» / work-3 скролл ошибочно блокируется
                 if (currentIndex < 3 && !isInSlideMode) {
                     isInSlideMode = true;
                     setScrollLock(true);
@@ -270,13 +260,11 @@ if (sections.length > 0 && !isSmallScreen) {
     });
 }
 
-// ==================== TOUCH ДЛЯ МОБИЛЬНЫХ (только на главной) ====================
+// ==================== TOUCH ====================
 
 let touchStartY = 0;
 
-// Touch‑эмулирование колёсика используем только на десктопе с тач‑экранами,
-// на малых экранах (isSmallScreen === true) кастомный скролл отключён.
-if (sections.length > 0 && !isSmallScreen) {
+if (sections.length > 0 && !isSmallScreen && !isProjectPage) {
     window.addEventListener(
         'touchstart',
         function (e) {
@@ -306,29 +294,21 @@ if (sections.length > 0 && !isSmallScreen) {
     );
 }
 
-// ==================== CURSOR - ТОЛЬКО НА ДЕСКТОПЕ ====================
+// ==================== CURSOR ====================
 
-const cursor = document.querySelector('.cursor');
-const cursorText = cursor ? cursor.querySelector('.cursor__text') : null;
-
-// Показать/скрыть курсор в зависимости от устройства
 function initCursor() {
+    const cursor = document.querySelector('.cursor');
+    
     if (isMobileDevice()) {
-        // На мобильных - скрываем курсор
-        if (cursor) {
-            cursor.style.display = 'none';
-        }
+        if (cursor) cursor.style.display = 'none';
 
-        // Убираем стили, которые скрывают стандартный курсор
         document.querySelectorAll('a, button, [role="button"]').forEach(el => {
             el.style.cursor = 'pointer';
         });
         document.body.style.cursor = 'auto';
-
-        return; // Не добавляем обработчики для курсора на мобильных
+        return;
     }
 
-    // На десктопе - инициализируем курсор
     if (cursor) {
         document.addEventListener('mousemove', e => {
             cursor.style.left = `${e.clientX}px`;
@@ -358,10 +338,9 @@ function initCursor() {
     }
 }
 
-// Инициализируем курсор
 initCursor();
 
-// ==================== БУРГЕР-МЕНЮ ====================
+// ==================== БУРГЕР ====================
 
 const header = document.querySelector('.header');
 const burger = document.querySelector('.header__burger');
@@ -371,7 +350,7 @@ if (burger && header) {
     burger.addEventListener('click', () => {
         header.classList.toggle('header--menu-open');
         burger.setAttribute('aria-expanded', header.classList.contains('header--menu-open'));
-        document.body.style.overflow = header.classContains('header--menu-open') ? 'hidden' : '';
+        document.body.style.overflow = header.classList.contains('header--menu-open') ? 'hidden' : '';
     });
 
     navLinks.forEach(link => {
@@ -391,61 +370,29 @@ if (burger && header) {
     });
 }
 
-// ==================== ДЕБАГ ИНФОРМАЦИЯ ====================
-
-const debugDiv = document.createElement('div');
-debugDiv.style.cssText = `
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background: rgba(0,0,0,0.8);
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-family: monospace;
-    font-size: 12px;
-    z-index: 9999;
-    pointer-events: none;
-    display: none; /* Скрываем в продакшене */
-`;
-document.body.appendChild(debugDiv);
-
-function updateDebugInfo() {
-    const sectionNames = ['hero', 'work-1', 'work-2', 'work-3', 'about', 'experience', 'footer'];
-    const mode = isInSlideMode ? 'slide' : 'scroll';
-    debugDiv.textContent = `Section: ${sectionNames[currentIndex]} | Mode: ${mode} | Mobile: ${isMobileDevice()}`;
-}
-
-setInterval(updateDebugInfo, 300);
-
 // ==================== АВАРИЙНОЕ ВОССТАНОВЛЕНИЕ СКРОЛЛА ====================
 
-// Восстановить скролл при нажатии Escape
 document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
         setScrollLock(false);
         isScrolling = false;
-        console.log('Scroll restored (Escape pressed)');
     }
 });
 
-// Восстановить скролл при двойном клике
 document.addEventListener('dblclick', function () {
     setScrollLock(false);
     isScrolling = false;
-    console.log('Scroll restored (double click)');
 });
 
-// ==================== FALLBACK ДЛЯ МЕДИА НА СТРАНИЦАХ ПРОЕКТОВ ====================
+// ==================== MEDIA FALLBACK ====================
 
 function initProjectMediaFallback() {
-    if (!document.body.classList.contains('page--project')) return;
+    if (!isProjectPage) return;
 
     function showPlaceholderFor(mediaEl) {
         const wrapper = mediaEl.closest('.project-page__media-inner');
         if (!wrapper) return;
 
-        // если уже есть placeholder внутри этого wrapper — ничего не делаем
         if (wrapper.querySelector('.project-page__media-placeholder')) {
             mediaEl.style.display = 'none';
             return;
@@ -484,9 +431,8 @@ function initProjectMediaFallback() {
     });
 }
 
-// Fallback для медиа на главной странице
 function initHomeMediaFallback() {
-    if (document.body.classList.contains('page--project')) return;
+    if (isProjectPage) return;
 
     function showHomePlaceholder(mediaEl) {
         const wrapper =
@@ -533,10 +479,11 @@ function initHomeMediaFallback() {
     });
 }
 
-// ==================== МОДАЛКА ДЛЯ МЕДИА НА СТРАНИЦАХ ПРОЕКТОВ ====================
+// ==================== MEDIA MODAL ====================
 
 function initProjectMediaModal() {
-    if (!document.body.classList.contains('page--project')) return;
+    if (!isProjectPage) return;
+    if (!isMobileDevice()) return;
 
     const mediaElements = document.querySelectorAll('.project-page__media-inner img, .project-page__media-inner video');
     if (!mediaElements.length) return;
@@ -649,14 +596,16 @@ function initProjectMediaModal() {
         }
     }
 
-    // Клик по медиa на странице проекта
-    mediaElements.forEach(el => {
-        el.style.cursor = 'zoom-in';
-        el.addEventListener('click', e => {
-            e.preventDefault();
-            openModal(el);
+    // Клик по медиa на странице проекта (только на мобильных)
+    if (isMobileDevice()) {
+        mediaElements.forEach(el => {
+            el.style.cursor = 'zoom-in';
+            el.addEventListener('click', e => {
+                e.preventDefault();
+                openModal(el);
+            });
         });
-    });
+    }
 
     // Закрытие по крестику и клику по фону
     closeBtn.addEventListener('click', closeModal);
@@ -684,8 +633,7 @@ function initProjectMediaModal() {
             const [t1, t2] = e.touches;
             const dx = t2.clientX - t1.clientX;
             const dy = t2.clientY - t1.clientY;
-            const dist = Math.hypot(dx, dy);
-            pinchStartDistance = dist;
+            pinchStartDistance = Math.hypot(dx, dy);
             startScale = scale;
         }
     }
@@ -765,45 +713,38 @@ let resizeTimeout;
 window.addEventListener('resize', function () {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
-        // При изменении размера переопределяем курсор
         initCursor();
-
-        // Обновляем текущую секцию
         currentIndex = getCurrentSectionIndex();
     }, 250);
 });
 
-// ==================== CSS ДОБАВКИ ====================
+// ==================== CSS ====================
 
 const style = document.createElement('style');
 style.textContent = `
-    /* Слайд-секция hero */
     #hero {
         height: 100vh !important;
         min-height: 100vh;
     }
-    
-    /* About секция */
+
     #about {
         min-height: 100vh;
         padding: 116px 0 0 0;
     }
-    
-    /* Плавный скролл */
+
     html {
         scroll-behavior: smooth;
     }
-    
-    /* Скрыть курсор на мобильных устройствах */
+
     @media (max-width: 768px), (hover: none) and (pointer: coarse) {
         .cursor {
             display: none !important;
         }
-        
+
         a, button, [role="button"] {
             cursor: pointer !important;
         }
-        
+
         body {
             cursor: auto !important;
         }
@@ -811,8 +752,6 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Инициализация fallback и модалки для медиа
 initProjectMediaFallback();
 initHomeMediaFallback();
 initProjectMediaModal();
-
