@@ -43,6 +43,11 @@ const sections = [
     document.querySelector('.footer'),
 ].filter(Boolean);
 
+// На страницах проектов (page--project) отключаем слайд-скролл полностью
+if (document.body.classList.contains('page--project')) {
+    sections.length = 0;
+}
+
 let currentIndex = 0; // Индекс текущей секции
 let isScrolling = false;
 let isInSlideMode = true; // true для hero и work, false для остальных
@@ -133,8 +138,12 @@ function isSectionAtTop(sectionIndex) {
 // ==================== ИНИЦИАЛИЗАЦИЯ (только десктоп) ====================
 
 if (sections.length > 0 && !isSmallScreen) {
-    setScrollLock(true); // Начинаем в слайд-режиме
-    scrollToSection(0, true); // Прокручиваем к hero
+    window.addEventListener('load', () => {
+        // Не двигаем страницу, только включаем/выключаем slide‑режим
+        currentIndex = getCurrentSectionIndex();
+        isInSlideMode = currentIndex < 4; // hero и блоки work‑1..3
+        setScrollLock(isInSlideMode);
+    });
 }
 
 // ==================== ОБРАБОТКА НАВИГАЦИИ ====================
