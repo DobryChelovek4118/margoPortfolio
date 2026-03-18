@@ -7,12 +7,17 @@ if (isProjectPage) {
 }
 
 const mail = document.querySelector('.footer__email');
-if (mail) mail.addEventListener('click', () => {
-    const user = mail.dataset.user;
-    const domain = mail.dataset.domain;
-    mail.href = `mailto:${user}@${domain}`;
-    mail.textContent = `${user}@${domain}`;
-});
+if (mail) {
+    function revealEmail() {
+        const user = mail.dataset.user;
+        const domain = mail.dataset.domain;
+        mail.href = `mailto:${user}@${domain}`;
+        mail.textContent = `${user}@${domain}`;
+    }
+    mail.addEventListener('mouseenter', revealEmail);
+    mail.addEventListener('focus', revealEmail);
+    mail.addEventListener('click', revealEmail);
+}
 
 // ==================== ОПРЕДЕЛЕНИЕ МОБИЛЬНОГО УСТРОЙСТВА ====================
 
@@ -296,9 +301,11 @@ if (sections.length > 0 && !isSmallScreen && !isProjectPage) {
 
 // ==================== CURSOR ====================
 
+let cursorInitialized = false;
+
 function initCursor() {
     const cursor = document.querySelector('.cursor');
-    
+
     if (isMobileDevice()) {
         if (cursor) cursor.style.display = 'none';
 
@@ -308,6 +315,9 @@ function initCursor() {
         document.body.style.cursor = 'auto';
         return;
     }
+
+    if (cursorInitialized) return;
+    cursorInitialized = true;
 
     if (cursor) {
         document.addEventListener('mousemove', e => {
@@ -492,6 +502,7 @@ function initProjectMediaModal() {
     modal.className = 'project-media-modal';
     modal.setAttribute('role', 'dialog');
     modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Просмотр медиа');
 
     const inner = document.createElement('div');
     inner.className = 'project-media-modal__inner';
@@ -499,6 +510,7 @@ function initProjectMediaModal() {
     const closeBtn = document.createElement('button');
     closeBtn.className = 'project-media-modal__close';
     closeBtn.type = 'button';
+    closeBtn.setAttribute('aria-label', 'Закрыть');
     closeBtn.innerHTML = '×';
 
     const captionEl = document.createElement('div');
@@ -718,39 +730,6 @@ window.addEventListener('resize', function () {
     }, 250);
 });
 
-// ==================== CSS ====================
-
-const style = document.createElement('style');
-style.textContent = `
-    #hero {
-        height: 100vh !important;
-        min-height: 100vh;
-    }
-
-    #about {
-        min-height: 100vh;
-        padding: 116px 0 0 0;
-    }
-
-    html {
-        scroll-behavior: smooth;
-    }
-
-    @media (max-width: 768px), (hover: none) and (pointer: coarse) {
-        .cursor {
-            display: none !important;
-        }
-
-        a, button, [role="button"] {
-            cursor: pointer !important;
-        }
-
-        body {
-            cursor: auto !important;
-        }
-    }
-`;
-document.head.appendChild(style);
 
 initProjectMediaFallback();
 initHomeMediaFallback();

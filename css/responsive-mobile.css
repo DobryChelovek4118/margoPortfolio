@@ -1,5 +1,19 @@
 /* ==================== АДАПТИВ: мобильные (≤768px, ≤480px) ==================== */
 
+@media (max-width: 768px), (hover: none) and (pointer: coarse) {
+    .cursor {
+        display: none !important;
+    }
+
+    a, button, [role="button"] {
+        cursor: pointer !important;
+    }
+
+    body {
+        cursor: auto !important;
+    }
+}
+
 @media (max-width: 768px) {
     .header {
         padding: var(--space-base) 0;

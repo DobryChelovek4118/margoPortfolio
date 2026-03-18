@@ -127,7 +127,7 @@
         width: 100%;
         max-width: 100%;
         height: auto;
-        border-radius: 2rem;
+        border-radius: var(--radius-media-home);
     }
 
     .work .project__media video {
@@ -152,7 +152,7 @@
         width: 100%;
         max-width: 100%;
         margin: 0;
-        border-radius: 2rem;
+        border-radius: var(--radius-media-home);
         overflow: hidden;
     }
 
