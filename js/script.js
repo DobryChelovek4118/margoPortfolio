@@ -51,7 +51,6 @@ const sections = isProjectPage ? [] : [
     document.getElementById('work-1'),
     document.getElementById('work-2'),
     document.getElementById('work-3'),
-    document.getElementById('about'),
     document.querySelector('.experience'),
     document.querySelector('.footer'),
 ].filter(Boolean);
@@ -113,7 +112,7 @@ function scrollToSection(index, instant = false) {
         isInSlideMode = true;
         setScrollLock(true);
     } else {
-        // about, experience, footer
+        // experience, footer
         isInSlideMode = false;
         setScrollLock(false);
     }
@@ -142,7 +141,7 @@ if (sections.length > 0 && !isSmallScreen && !isProjectPage) {
         if (hash === 'work' || hash === 'work-1') targetIndex = 1;
         else if (hash === 'work-2') targetIndex = 2;
         else if (hash === 'work-3') targetIndex = 3;
-        else if (hash === 'about') targetIndex = 4;
+        else if (hash === 'about' || hash === 'experience') targetIndex = 4;
         else {
             targetIndex = getCurrentSectionIndex();
         }
@@ -217,7 +216,7 @@ if (sections.length > 0 && !isSmallScreen && !isProjectPage) {
                 return;
             }
 
-            // Обычный режим (about, experience, footer)
+            // Обычный режим (опыт, футер)
             e.preventDefault();
             const direction = e.deltaY > 0 ? 1 : -1;
             if (direction === 1) {
@@ -447,7 +446,6 @@ function initHomeMediaFallback() {
     function showHomePlaceholder(mediaEl) {
         const wrapper =
             mediaEl.closest('.project__media') ||
-            mediaEl.closest('.about__media') ||
             mediaEl.parentElement;
         if (!wrapper) return;
 
@@ -475,7 +473,7 @@ function initHomeMediaFallback() {
         wrapper.appendChild(placeholder);
     }
 
-    const images = document.querySelectorAll('.work .project__media img, .about__media .about__img');
+    const images = document.querySelectorAll('.work .project__media img');
     images.forEach(img => {
         img.addEventListener('error', () => showHomePlaceholder(img));
     });

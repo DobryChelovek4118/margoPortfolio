@@ -184,16 +184,6 @@
         margin-top: calc(var(--space-xl) * 2);
     }
 
-    .about__text {
-        width: 100%;
-        font-size: var(--font-heading-md);
-    }
-
-    .about__media .about__img {
-        max-width: var(--about-img-max-width-md);
-        max-height: var(--about-img-max-height-md);
-    }
-
     .experience__title {
         position: static;
         max-width: var(--project-content-max-md);
@@ -211,6 +201,15 @@
     .experience__item,
     .experience__list {
         max-width: var(--project-content-max-md);
+    }
+
+    .tool-timeline {
+        max-width: var(--project-content-max-md);
+    }
+
+    .tool-timeline__row {
+        grid-template-columns: minmax(72px, 108px) 1fr;
+        gap: var(--space-base) var(--layout-gap-md);
     }
 
     .footer__title {

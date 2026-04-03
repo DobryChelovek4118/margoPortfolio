@@ -44,7 +44,7 @@
     --font-subheading: var(--font-size-16);  /* подзаголовки секций: АУДИТОРИЯ, ЦЕЛЬ, ЗАДАЧИ */
     --font-heading-sm: var(--font-size-18); /* заголовки, должности */
     --font-heading-md: var(--font-size-24); /* заголовки карточек и секций */
-    --font-heading-lg: var(--font-size-28); /* about, крупные блоки */
+    --font-heading-lg: var(--font-size-28); /* крупные блоки */
     --font-heading-xs: var(--font-size-20);  /* адаптивные заголовки ≤1024px */
     --font-display-xs: var(--font-size-32);  /* герой-линия на ≤768px */
     --font-display-md: var(--font-size-32);  /* футер на ≤1024px */
@@ -90,7 +90,6 @@
     /* Секции */
     --section-padding-y: var(--space-4xl);         /* 40px */
     --section-padding-bottom: var(--space-12xl);   /* 100px */
-    --about-padding-top: 116px;
     --work-padding-top: var(--space-12xl);         /* 100px */
     --footer-padding-y: var(--space-8xl);          /* 60px */
     --footer-padding-bottom: var(--space-12xl);    /* 100px */
@@ -133,12 +132,6 @@
     --header-burger-line-offset: 4px;
     --header-nav-padding-y-md: 60px;
 
-    /* Блок "Обо мне" */
-    --about-img-max-width: 250px;
-    --about-img-max-height: 350px;
-    --about-img-max-width-md: 200px;
-    --about-img-max-height-md: 280px;
-
     /* Опыт и кейсы */
     --experience-item-max-width: 600px;
 
@@ -151,6 +144,6 @@
     --cursor-size: 30px;
 
     /* Радиусы медиа */
-    --radius-media-home: 16px;      /* главная страница, desktop */
-    --radius-media-mobile: 16px;    /* все медиа на мобильных */
+    --radius-media-home: 12px;      /* главная страница, desktop */
+    --radius-media-mobile: 12px;    /* все медиа на мобильных */
 }

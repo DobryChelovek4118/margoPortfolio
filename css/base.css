@@ -64,7 +64,6 @@ body {
 #work-1,
 #work-2,
 #work-3,
-#about,
 .experience,
 .footer {
     scroll-margin-top: var(--header-height);
@@ -255,16 +254,9 @@ body {
     font-weight: 700;
 }
 
-.about__wrapper {
-    display: flex;
-    gap: var(--layout-gap);
-}
-
 /* Радиусы медиа на главной (desktop) */
 .hero img,
-.work img,
-#about img,
-.about__media .about__img {
+.work img {
     border-radius: var(--radius-media-home);
 }
 
@@ -315,24 +307,6 @@ body {
     color: var(--color-text-muted);
 }
 
-.about__media .about__img {
-    max-width: var(--about-img-max-width);
-    max-height: var(--about-img-max-height);
-}
-
-.about__text {
-    font-family: 'Involve', sans-serif;
-    font-weight: 500;
-    font-size: var(--font-heading-lg);
-    line-height: 125%;
-    color: var(--color-text);
-    width: 60%;
-}
-
-.about__text-paragraph {
-    margin-top: var(--space-base);
-}
-
 .experience {
     padding: var(--section-padding-y) 0 var(--section-padding-bottom);
 }
@@ -345,6 +319,69 @@ body {
     color: var(--color-text);
     position: sticky;
     top: var(--experience-sticky-top);
+}
+
+.tool-timeline {
+    max-width: var(--experience-item-max-width);
+    width: 100%;
+}
+
+.tool-timeline__row {
+    display: grid;
+    grid-template-columns: minmax(88px, 132px) 1fr;
+    gap: var(--space-xl) var(--layout-gap);
+    align-items: center;
+    padding: var(--space-2xl) 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.tool-timeline__row--last {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.tool-timeline__period {
+    font-family: 'Involve', sans-serif;
+    font-weight: 700;
+    font-size: var(--font-heading-sm);
+    line-height: var(--lh-heading);
+    letter-spacing: var(--tracking-base);
+    color: var(--color-text);
+}
+
+.tool-timeline__icons {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    align-items: center;
+}
+
+.tool-timeline__icon {
+    display: block;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: var(--radius-media-home);
+    overflow: hidden;
+    box-shadow: none;
+    background-color: transparent;
+}
+
+.tool-timeline__img,
+.tool-timeline__icon img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.tool-timeline__svg {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 .experience__item {
@@ -590,12 +627,6 @@ body {
 
 .cursor--hidden {
     opacity: 0;
-}
-
-#about {
-    min-height: 100vh;
-    padding: var(--about-padding-top) 0 0;
-    position: relative;
 }
 
 #hero {

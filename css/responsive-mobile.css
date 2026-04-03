@@ -43,12 +43,23 @@
         font-size: var(--font-heading-sm);
     }
 
-    .project__text {
-        font-size: var(--font-body);
+    .tool-timeline__row {
+        grid-template-columns: 1fr;
+        gap: var(--space-base);
+        align-items: start;
     }
 
-    .about__text {
+    .tool-timeline__period {
         font-size: var(--font-heading-xs);
+    }
+
+    .tool-timeline__icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .project__text {
+        font-size: var(--font-body);
     }
 
     .footer__title {
@@ -98,7 +109,6 @@
 
     /* Медиа: на мобильных радиус 16px через переменную */
     img,
-    .about__media .about__img,
     .work .project__media-poster,
     .work .project__media img,
     video,
