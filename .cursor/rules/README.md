@@ -21,55 +21,45 @@ npm run preview    # предпросмотр собранной версии
 |--------|------|
 | Заголовок | `src/partials/index/hero.html` |
 | Карточки проектов | `src/partials/index/work.html` |
-| Обо мне | `src/partials/index/about.html` |
-| Опыт работы | `src/partials/index/experience.html` |
+| Блог / соцсети | `src/partials/index/blog.html` |
 | Контакты (футер) | `src/partials/footer-main.html` |
 
 ### Страницы проектов
 
-Файлы страниц лежат в `projects/`, а контент внутри `<main class="project-page">` вынесен в партиалы по папкам:
+Файлы страниц — в `projects/`. Контент — в партиалах `src/partials/projects/<кейс>/`.
 
-- `projects/project-crm.html` — CRM для колл-центра  
-  - Контент: `src/partials/projects/crm/`  
-    - `project-crm-hero.html` — герой + первое медиа  
-    - `project-crm-intro.html` — аудитория, цель, задачи  
-    - `project-crm-flow.html` — флоу работы с клиентом + медиа  
-    - `project-crm-case-page.html` — страница обращения  
-    - `project-crm-widgets.html` — виджеты и мотивация  
-    - `project-crm-schedule.html` — управление графиком  
-    - `project-crm-gamification.html` — геймификация  
-    - `project-crm-other-sections.html` — дополнительные разделы  
-    - `project-crm-design-system.html` — дизайн-система  
-    - `project-crm-results.html` — итоги  
-    - `project-crm-next.html` — что дальше  
-    - `project-crm-other-projects.html` — навигация к другим кейсам
+| Страница | Файл | Партиалы |
+|----------|------|----------|
+| Сайт МТС (work-1) | `projects/project-e-comm.html` | `src/partials/projects/e-comm/` |
+| Маркетплейс (work-2) | `projects/project-marketplace.html` | `src/partials/projects/marketplace/` |
+| Провайдеры (work-3) | `projects/project-providers.html` | `src/partials/projects/providers/` |
+| CRM | `projects/project-crm.html` | `src/partials/projects/crm/` |
+| Mini App | `projects/project-mini-app.html` | `src/partials/projects/mini-app/` |
+| ERM | `projects/project-erm.html` | `src/partials/projects/erm/` |
+| Дизайн-система | `projects/project-design-system.html` | `src/partials/projects/design-system/` |
 
-- `projects/project-e-comm.html` — Сайт МТС  
-  - Контент: `src/partials/projects/e-comm/`  
-    - `project-e-comm-hero.html` — герой + главное видео  
-    - `project-e-comm-intro.html` — аудитория, цель, задачи  
-    - `project-e-comm-analysis.html` — предпроектная аналитика  
-    - `project-e-comm-research.html` — ресерч и сценарии  
-    - `project-e-comm-design-and-ui.html` — дизайн-система и главный экран  
-    - `project-e-comm-tariff-and-modals.html` — карточка тарифа и модальные окна  
-    - `project-e-comm-results.html` — результаты, «что дальше» и навигация к другим кейсам
+Файл `projects/project-*.html` — только каркас (`head`, `header`, цепочка `<include>`, `footer`). Контент кейса — в партиалах.
 
-- `projects/project-mini-app.html` — Публикатор  
-  - Контент: `src/partials/projects/mini-app/`  
-    - `project-mini-app-hero.html` — герой + главное медиа  
-    - `project-mini-app-intro.html` — аудитория, цель, задачи  
-    - `project-mini-app-metrics-and-analysis.html` — метрики MVP и предпроектная аналитика  
-    - `project-mini-app-onboarding-and-subscriptions.html` — онбординг и подписки  
-    - `project-mini-app-main-screen-and-editor.html` — главный экран и редактор публикаций  
-    - `project-mini-app-channels-profile-and-ui.html` — каналы, профиль, темы и UI-kit  
-    - `project-mini-app-next.html` — что дальше и навигация к другим кейсам
+**E-com**: hero, process-stages, intro, analysis, research, design-and-ui, tariff-and-modals, results.
+
+**Marketplace**: hero, intro, process-stages, research, design, results, next.
+
+**Providers**: hero, intro, process-stages, solution, gallery, results, next.
+
+**ERM**: hero, intro, process-stages, solution, changes, results, next.
+
+**CRM**: hero, intro, flow, case-page, widgets, schedule, gamification, other-sections, design-system, results, next.
+
+**Mini App**: hero, intro, metrics-and-analysis, onboarding, main-screen-and-editor, channels-profile-and-ui, next.
 
 ### Добавить новый проект
 
 1. Скопировать любой файл из `projects/`, переименовать
 2. Заменить содержимое `<main>` на контент нового проекта
-3. Добавить карточку в `src/partials/work.html`
-4. Зарегистрировать в `vite.config.js` в секции `rollupOptions.input`
+3. Добавить карточку в `src/partials/index/work.html`
+4. Добавить `og:title` и `og:url` в `<head>` новой страницы (см. другие `projects/project-*.html`)
+
+Новые `projects/project-*.html` подхватываются Vite автоматически (`getRollupInputs()` в `vite.config.js`).
 
 ---
 
@@ -77,74 +67,67 @@ npm run preview    # предпросмотр собранной версии
 
 ```
 src/partials/                ← HTML-фрагменты
-  head-meta.html             ← <head> c мета и стилями
-  header-main.html           ← шапка главной
-  header-project.html        ← шапка страниц проектов
-  footer-main.html           ← футер главной (контакты)
-  footer-project.html        ← футер страниц проектов
-  index/                     ← секции главной страницы
-    hero.html
-    work.html
-    about.html
-    experience.html
+  head-meta.html             ← <head> главной
+  head-meta-project.html     ← <head> страниц кейсов
+  header-main.html / header-project.html
+  footer-main.html / footer-project.html
+  loader.html
+  index/                     ← hero, work, blog
   projects/
-    crm/                     ← секции кейса CRM
-      project-crm-*.html
-    e-comm/                  ← секции кейса МТС
-      project-e-comm-*.html
-    mini-app/                ← секции кейса Публикатор
-      project-mini-app-*.html
+    e-comm/                  ← партиалы кейса МТС
+    crm/
+    mini-app/
+    marketplace/
+    providers/
+    erm/
+    design-system/
 
-css/                         ← стили
-  reset.css                  ← CSS reset
-  fonts.css                  ← @font-face и подключение шрифтов
-  variables.css              ← все дизайн‑токены (цвета, типографика, отступы, размеры)
-  base.css                   ← базовая верстка, сетка, общие компоненты, курсор
-  project-page.css           ← общие стили страниц кейсов (`.project-page__*`)
-  responsive-tablet.css      ← адаптив для планшетов (≤1024px)
-  responsive-mobile.css      ← адаптив для мобильных (≤768px и ≤480px)
-img/                         ← изображения
-  crm/                       ← медиа CRM (keys-1-*.png)
-  e-comm/                    ← медиа МТС (keys-2-*.png)
-  mini-app/                  ← медиа Публикатора (keys-3-*.png)
-  picture.png                ← фото для блока «Обо мне»
-resource/                    ← видеофайлы .mp4
-  crm/                       ← видео CRM (keys-1.mp4, progect-keys-1-video-*.mp4)
-  e-comm/                    ← видео МТС (keys-2.mp4, progect-keys-2-video-*.mp4)
-  mini-app/                  ← видео Публикатора (keys-3.mp4, progect-keys-3-video-*.mp4)
-projects/                    ← страницы кейсов
-fonts/
+projects/                    ← HTML страниц кейсов (7 штук)
+css/                         ← reset, fonts, variables, base, project-page, responsive-*
+js/script.js                 ← единственный JS (ES module)
+
+public/                      ← статика с корня сайта (/…)
+  favicon, og-image.jpg
+  img/                       ← WebP + arrow.svg (пути в HTML: /img/…)
+  resource/                  ← .mp4 (пути: /resource/…)
+
+fonts/                       ← VelaSans-Regular, ZT Neue Ralewe Regular + Italic
+
+scripts/
+  check-assets.mjs / check-includes.mjs / check-paths.mjs
+  lib/                       ← общая логика для CLI и тестов
+  compress-images.mjs
+  find-unused-assets.mjs
+  archive/                   ← разовые миграции
+
+tests/
+  *.test.mjs                 ← npm test
 ```
 
 ---
 
 ## Шрифты
 
-- `Involve-Regular.otf` (`font-family: 'Involve'; font-weight: 400`) — основной текст (все параграфы, списки и мета без явного `font-family`).  
-- `Involve-Medium.otf` (`font-weight: 500`) — заголовки и акценты: хедер, `hero`, `.project__title`, `.experience__title`, `.experience-card__position`, `.project-page__title`, `.project-page__heading`, `.project-page__subheading`, ссылки вида «Открыть макет в Figma» и т.п.  
-- `Involve-Oblique.otf` (`font-style: italic`) — **подписи под фото и видео** (`.project-page__caption`).
+Подключение — в `css/fonts.css`. В стилях:
+
+- **VelaSans** (`fonts/VelaSans-Regular.ttf`) — основной текст: параграфы, списки, мета, навигация, лоадер.
+- **ZT Neue Ralewe** (`fonts/ZT Neue Ralewe - OT/`, Regular + Italic) — заголовки и акценты: `.hero__title`, `.project__title`, `.project-page__title`, `.project-page__heading`, `.project-page__subheading`, футер.
+
+Старый **Involve** из проекта удалён; в `project-page.css` может остаться fallback `'Involve'` в `font-family` — на рендер не влияет.
 
 ### Типографика
 
-- Базовый текст:
-  - размер: `--font-body` (14px),
-  - интерлиньяж: `line-height: 145%`,
-  - кернинг (трекинг): `letter-spacing: 0.05em`.
-- Заголовки (карточки проектов, секции, страницы кейсов):
-  - `line-height: 128%`,
-  - `letter-spacing: 0.05em`,
-  - шрифт: `Involve Medium`.
-- Метаданные (списки «Годы / Роль / Область» в кейсах) используют те же параметры, что основной текст (14px, 145%, 0.05em).
-- Подписи под медиа (`.project-page__caption`) — 12px, `line-height: 130%`, `letter-spacing: 0.05em`, курсив `Involve-Oblique`.
+- Базовый текст: `--font-body` (14px), `line-height: 145%`, `letter-spacing: 0.05em`, **VelaSans**.
+- Заголовки: `line-height: 128%`, `letter-spacing: 0.05em`, **ZT Neue Ralewe**.
+- Подписи (`.project-page__caption`): 12px, `line-height: 130%`, **ZT Neue Ralewe Italic** (не отдельный Oblique).
 
 ### CSS‑переменные и «магические» числа
 
 - Все ключевые размеры и отступы собраны в `css/variables.css`. Там хранятся:
   - базовая типографическая шкала и семантические токены (`--font-body`, `--font-heading-md`, `--font-display-lg`),
   - отступы и размеры контейнеров (`--space-*`, `--container-*`, `--layout-*`),
-  - размеры блоков и карточек (`--project-content-max`, `--project-content-max-wide`, `--experience-item-max-width`),
+  - размеры блоков и карточек (`--project-content-max`, `--project-content-max-wide`),
   - геометрия курсора (`--cursor-size`), бургер‑меню и навигации (`--header-burger-*`, `--header-nav-padding-y-md`),
-  - размеры изображений в блоке «Обо мне» (`--about-img-*`),
   - ширина элементов футера (`--footer-title-max-width`, `--footer-item-max-width`) и отступы декоративных элементов.
 - Новые числовые значения в `css/*.css` не добавляем «вручную». Сначала заводим читаемую переменную в `variables.css`, потом используем её в стилях.
 
@@ -155,46 +138,62 @@ fonts/
 - Любое изменение структуры файлов (новая папка, перенос медиа, добавление партиалов) **обязательно** нужно сразу фиксировать в этом README.
 - Любые новые правила типографики, отступов, нейминга классов или подключения шрифтов тоже должны быть описаны в разделе «Типографика» или рядом по смыслу.
 - При добавлении нового проекта:
-  - положить медиа в соответствующие подпапки `img/<project>/` и `resource/<project>/`,
+  - положить медиа в `public/img/<project>/` и `public/resource/<project>/`,
   - обновить таблицу по проектам и структуру папок в README,
   - кратко описать, как подключаются новые партиалы и какие медиа к ним привязаны.
 
 ---
 
-## WebP (автоконвертация изображений)
+## Изображения (WebP-only)
 
-На `npm run build` изображения из `img/**` автоматически конвертируются в `.webp`, и ссылки в HTML подменяются на WebP-версии **если файл `.webp` существует**.
+Медиа лежат в **`public/img/`** и **`public/resource/`**. В HTML/CSS — абсолютные пути `/img/…`, `/resource/…` (и `.webp` в разметке).
 
-- **Как работает**:
-  - генерация: для каждого `.png/.jpg/.jpeg` в `img/**` создаётся соседний файл `.webp` (через `sharp`);
-  - подмена ссылок: в HTML во время билда заменяются `...png/jpg/jpeg` → `...webp` (работает для абсолютных `/img/...` и относительных `../img/...` путей).
-- **Важно**:
-  - в dev (`npm run dev`) ничего не конвертируется и ссылки не подменяются;
-  - исходники `.png/.jpg` остаются (fallback и исходный материал);
-  - WebP генерируется только для картинок в `img/**` (видео и `resource/**` не трогаются).
+- **Dev и build**: Vite отдаёт `public/` с корня; картинки **не** дублируются в `dist/assets/` (только шрифты из CSS попадают в assets).
+- **Сжатие**: `npm run compress:images`
+- **Иконки / OG**: `public/favicon*`, `public/og-image.jpg`; канонический домен — `https://margarita-product.ru`
 
 ---
 
-## Проверка ассетов (пути к img/resource)
-
-Перед билдом можно прогнать проверку, что все пути к медиа в HTML реально существуют:
+## Проверки и тесты
 
 ```bash
-npm run check:assets
+npm test              # unit-тесты (node:test) для scripts/lib/*
+npm run check:all     # ассеты + include + пути /img/
+npm run test:ci       # test + check:all + build (для CI)
 ```
 
-Скрипт проверяет ссылки на локальные ассеты в:
-- `src/partials/**/*.html`
-- `projects/*.html`
-- `index.html`
+| Команда | Что делает |
+|---------|------------|
+| `npm run check:assets` | Все `/img/`, `/resource/` в HTML/CSS существуют в `public/` |
+| `npm run check:includes` | Все `<include src="...">` резолвятся, нет циклов |
+| `npm run check:paths` | Нет `../img/`, `img/` без `/`, `.png`/`.jpg` в путях |
+| `npm run check:unused` | Неиспользуемые файлы в `public/img`, `public/resource` |
+| `npm run compress:images` | Сжатие `.webp` в `public/img/` |
 
-Проверяются только пути вида `/img/...`, `/resource/...`, `../img/...`, `../resource/...`.
+Логика проверок вынесена в `scripts/lib/` и покрыта тестами в `tests/*.test.mjs`.
 
 ---
 
 ## Стек
 
 Vanilla HTML/CSS/JS + **Vite** как сборщик. Нет фреймворков. Нет препроцессоров.
+
+---
+
+## JavaScript (`js/script.js`)
+
+- **Один файл** в корне `js/script.js` — дубликата в `public/js/` нет (иначе Vite и prod отдают разные версии).
+- Подключение в `footer-main.html` и `footer-project.html`:
+
+```html
+<script type="module" src="/js/script.js"></script>
+```
+
+Абсолютный путь `/js/...` — чтобы Vite видел модуль на всех страницах (`/` и `/projects/...`) одинаково.
+
+- В dev/build Vite обрабатывает скрипт как ES‑модуль (граф сборки, попадание в `dist/`).
+- При сохранении `js/script.js` срабатывает full reload (см. `handleHotUpdate` в `vite.config.js`).
+- Логика лоадера: `initLoader()` в начале файла, разметка — `src/partials/loader.html`.
 
 ---
 
@@ -217,36 +216,58 @@ Vanilla HTML/CSS/JS + **Vite** как сборщик. Нет фреймворк�
 
 ## Медиафайлы проектов
 
-### CRM (project-crm.html)
+### Нейминг
+
+В каждой папке `img/<кейс>/` файлы именуются **`NN-описание.webp`** (двузначный номер + kebab-case). В HTML/CSS — тот же путь с `.webp`.
+
+Общие ассеты главной: `img/shared/` — `hero.webp`, `work-*-loop.webp` (+ `-mobile` для ≤1024px).
+
+### CRM (`img/crm/`, `resource/crm/`)
 
 | Секция | Видео | Постер |
 |--------|-------|--------|
-| Главное изображение | `progect-keys-1-video-1.mp4` | `keys-1-img-1.png` |
-| Новый флоу работы с клиентом | `progect-keys-1-video-3.mp4` | `keys-1-img-3.png` |
-| Виджеты и мотивация | `keys-1.mp4` | `keys-1-img.png` |
-| Управление графиком | `progect-keys-1-video-2.mp4` | `keys-1-img-2.png` |
-| Геймификация | `progect-keys-1-video-4.mp4` | `keys-1-img-4.png` |
-| Главная (карточка) | `progect-keys-1-video-1.mp4` | `keys-1-img-1.png` |
+| Герой | `hero.mp4` | `01-cover-poster.png` |
+| Виджеты | `widgets-demo.mp4` | `08-widgets-video-poster.png` |
+| Флоу обращения | `flow-demo.mp4` | `13-flow-video-poster.png` |
+| График | `schedule-demo.mp4` | `19-schedule-video-poster.png` |
+| Геймификация | `gamification-demo.mp4` | `16-gamification-video-poster.png` |
 
-### Публикатор (project-mini-app.html)
+Статика: `02-flow-schema` … `22-news-client` (см. партиалы в `src/partials/projects/crm/`).
 
-| Секция | Видео | Постер |
-|--------|-------|--------|
-| Управление подписками и тарифами | `progect-keys-3-video-1.mp4` | `keys-3-img-1.png` |
-| Главный экран и навигация | `progect-keys-3-video-2.mp4` | `keys-3-img-2.png` |
-| Остальные разделы (каналы) | `progect-keys-3-video-3.mp4` | `keys-3-img-3.png` |
-| Редактор публикаций | `progect-keys-3-video-4.mp4` | `keys-3-img-4.png` |
-| Поддержка темной и светлой темы | `keys-3.mp4` | `keys-3-img-5.png` |
-| Календарь и планирование | `progect-keys-3-video-5.mp4` | `keys-3-img-6.png` |
-
-### МТС (project-e-comm.html)
+### МТС e-comm (`img/e-comm/`, `resource/e-comm/`)
 
 | Секция | Видео | Постер |
 |--------|-------|--------|
-| Главное изображение | `keys-2.mp4` | `keys-2-img.png` |
-| Карточка тарифа | `progect-keys-2-video-1.mp4` | `keys-2-img-1.png` |
-| Модальные окна | `progect-keys-2-video-2.mp4` | `keys-2-img-2.png` |
-| Главная (карточка) | `keys-2.mp4` | `keys-2-img.png` |
+| Герой | `hero.mp4` | `01-cover-poster.png` |
+| Карточка тарифа | `tariff-card.mp4` | `03-tariff-card-poster.png` |
+| Модальные окна | `modals-demo.mp4` | `04-modals-poster.png` |
+
+Статика: `02-process-stages`, `05-main-page`, `06-main-before-after`, `07-modals`, `08-scenarios-schema` и др.
+
+### Публикатор (`img/mini-app/`, `resource/mini-app/`)
+
+| Секция | Видео | Постер |
+|--------|-------|--------|
+| Каналы | `channels-demo.mp4` | `07-channels-video-poster.png` |
+| Редактор | `editor-demo.mp4` | `08-editor-scenarios.png` (кадр) |
+| Создание поста | `create-post-demo.mp4` | `10-create-post-poster.png` |
+| Календарь | `calendar-demo.mp4` | `13-calendar-poster.png` |
+| Темы UI | `hero.mp4` | `15-themes-video-poster.png` |
+
+Статика: `01-cover` … `14-profile`, `11-post-themes-poster` и др.
+
+### Маркетплейс (`img/marketplace/`, без видео)
+
+`01-cover`, `02-process-stages`, `03-personas`, `04-user-stories`, `05-cjm`, `06-scenarios-table`, `07-site-before`, `08-wireframes`, `09-main-variants`, `10-main-current`, `11-providers-page`, `12-sim-card-flow`, `13-tariffs-page`, `14-modals`.
+
+### Провайдеры (`img/providers/`)
+
+`01-cover`, `02-process-stages`, `03-competitors-table`, `04-mts-megafon`, `05-beeline-template`, `06-domru`.
+
+### ERM и дизайн-система
+
+- `img/erm/` — `01-cover` … `08-themes` (контент в `project-erm.html`).
+- `img/design-system/` — `01-cover-poster`, `02-showcase`.
 
 ---
 
@@ -306,8 +327,6 @@ Vanilla HTML/CSS/JS + **Vite** как сборщик. Нет фреймворк�
 - `--container-padding-sm`: 28px (≤480px)
 - `--layout-aside`: 310px — ширина левой колонки `.layout__aside`
 - `--project-content-max-md`: 400px — max-width контента на адаптиве
-- `--experience-item-margin-bottom`: 48px
-- `--experience-item-padding-bottom`: 48px
 
 ---
 
@@ -316,8 +335,6 @@ Vanilla HTML/CSS/JS + **Vite** как сборщик. Нет фреймворк�
 | Элемент | Desktop | ≤1024px | ≤480px |
 |---------|---------|---------|--------|
 | `.project__title` (заголовок карточки проекта) | 24px | 20px | 18px |
-| `.experience__title` («Опыт работы») | 24px | 20px | — |
-| `.experience-card__position` (должность) | 24px | 20px | — |
 | `.project__text` (описание проекта) | 18px | 18px | 15px |
 | `.project__meta-item` (мета‑список) | 18px | 18px | 15px |
 | `.project-page__heading` (заголовки секций) | — | — | — |
@@ -368,31 +385,31 @@ Vanilla HTML/CSS/JS + **Vite** как сборщик. Нет фреймворк�
 
 ## CSS reset
 
-`reset.css` сбрасывает `font: inherit` на всех элементах, включая `<strong>`. Поэтому жирность задаётся явно:  
-`.experience-card__description strong { font-weight: 700 }`.
+`reset.css` сбрасывает `font: inherit` на всех элементах, включая `<strong>`. Жирность в тексте кейсов задаётся через `<strong>` в разметке.
 
 ---
 
-## Опыт работы — структура карточек
+## Пути к ресурсам
 
-Каждая карточка опыта работы использует `<ul class="project-page__list">` для списков внутри `.experience-card__description`.  
-Заголовки «Обязанности:» и «Достижения:» обёрнуты в `<p><strong>...</strong></p>`.
-
----
-
-## Пути к ресурсам в партиалах
-
-- Внутри `src/partials/**` для CSS/JS/медиа используются **абсолютные** пути `/css/`, `/img/`, `/js/`, `/resource/` — так одинаково работает и в dev, и при деплое в корень домена.
-- В `projects/*.html` пути к медиа — **относительные** `../img/`, `../resource/`.
+- **Главная** (`src/partials/index/`, `head-meta.html`): абсолютные `/css/`, `/js/`, `/img/…` где нужно.
+- **HTML партиалы и CSS**: абсолютные `/img/…`, `/resource/…` (файлы в `public/img`, `public/resource`).
+- **CSS, JS, favicon**: `/css/…`, `/js/script.js`, `/favicon.svg` — работают с главной и из `projects/`.
 
 ---
 
-## Multi-page регистрация (vite.config.js)
+## Multi-page (vite.config.js)
 
-При добавлении новой страницы нужно зарегистрировать её во входных точках Vite:
+`rollupOptions.input` собирается автоматически: `index.html` + все `projects/project-*.html` (`getRollupInputs()`).
 
-```js
-newpage: path.resolve(__dirname, 'projects/project-new.html'),
+## OG и title (страницы кейсов)
+
+`head-meta-project.html` — общие favicon, CSS, `og:image`, описание.  
+В каждом `projects/project-*.html` после `<include>`:
+
+```html
+<title>Кейс …</title>
+<meta property="og:title" content="Кейс … — Маргарита" />
+<meta property="og:url" content="https://margarita-product.ru/projects/project-….html" />
 ```
 
 ---

@@ -3,6 +3,66 @@
 Файл фиксирует изменения, сделанные в проекте во время итераций улучшений.
 Если меняется структура, типографика, медиа или процессы сборки — добавлять запись сюда и обновлять `.cursor/rules/README.md`.
 
+## 2026-05 — тесты и проверки
+
+### Тесты
+- `npm test` — unit-тесты (`node:test`) для `check-assets`, `check-includes`, `check-legacy-paths`.
+- `npm run check:includes`, `npm run check:paths`, `npm run check:all`.
+- `npm run test:ci` — тесты + все проверки + `vite build`.
+- Логика в `scripts/lib/`; CLI: `scripts/check-*.mjs`.
+
+### Правила Cursor
+- Удалены `copywriting-*.mdc` (CRM, e-comm, mini-app).
+
+## 2026-05 — структура, ассеты, SEO
+
+### Оптимизация структуры
+- Удалены мёртвые стили `.experience*`, `.tool-timeline*` и связанные CSS‑переменные.
+- Шрифты: оставлены только используемые файлы (VelaSans Regular, ZT Neue Ralewe Regular + Italic).
+- Единый домен OG: `https://margarita-product.ru`; абсолютные пути `/css/`, `/img/`, favicon в head.
+- У каждого кейса свои `og:title` и `og:url` в `projects/project-*.html`.
+- `public/mts-2-1-drawio.html` удалён; `.DS_Store` в `.gitignore`.
+- `npm run compress:images`, `npm run check:unused`; миграции перенесены в `scripts/archive/`.
+- Vite: автоматический `rollupOptions.input` для `projects/project-*.html`.
+- Медиа в `public/img/` и `public/resource/` — без дубля в `dist/assets/`; пути `/img/`, `/resource/` в HTML/CSS.
+
+## 2026-05 — JS, кейсы, медиа, шрифты, документация
+
+### Изображения (WebP-only)
+- В `img/` только `.webp` + `arrow.svg`; PNG/JPG удалены.
+- Все пути в HTML/CSS переведены на `.webp` (включая hero и loop-фоны в `css/base.css`).
+- Сборка: вместо автоконвертации — копирование `img/` и `resource/` в `dist/`.
+- Скрипты: `to-webp-only.mjs`, `replace-img-paths-webp.mjs`; `compress-images.mjs` работает только с WebP.
+
+### Партиалы кейсов
+- Контент marketplace, providers и ERM вынесен в `src/partials/projects/{marketplace,providers,erm}/`.
+- E-comm: блок «Этапы работы» → `project-e-comm-process-stages.html`.
+- Страницы `projects/project-*.html` — только каркас с `<include>` (как CRM).
+
+### JavaScript
+- Один источник: `js/script.js` (слит с `public/js/script.js`, включая `initLoader`).
+- Удалён дубликат `public/js/script.js`.
+- Подключение: `<script type="module" src="/js/script.js">` в футерах главной и кейсов.
+- HMR: изменения в `js/script.js` вызывают full reload в dev.
+
+### Новые страницы и контент
+- Добавлены кейсы: маркетплейс тарифов (`project-marketplace.html`), провайдеры (`project-providers.html`), ERM, дизайн-система.
+- Главная: три карточки work (МТС, маркетплейс, провайдеры), секция `blog.html`; блоки `about` / `experience` сняты.
+- Из шапки убран пункт «Соц. сети»; контент кейсов выровнен по орфографии и подписям к медиа.
+
+### Медиа
+- Миграция ассетов в `img/<кейс>/NN-описание.png` и `resource/<кейс>/*.mp4` (`scripts/migrate-assets.mjs`).
+- Общие файлы — `img/shared/` (hero, loop-фоны карточек).
+- Сжатие изображений и регенерация `.webp` (`scripts/compress-images.mjs`).
+- Удалены неиспользуемые файлы (`scripts/find-unused-assets.mjs`); `npm run check:assets` проходит.
+- Исправлен путь hero в `css/base.css` → `img/shared/hero.webp`.
+
+### Шрифты
+- Involve заменён на **VelaSans** (текст) и **ZT Neue Ralewe** (заголовки, курсивные подписи).
+
+### Документация
+- `.cursor/rules/README.md` приведён к актуальной структуре, неймингу медиа, шрифтам и скриптам.
+
 ## 2026-03 — типографика, структура, медиа, сборка
 
 ### HTML / партиалы

@@ -6,6 +6,13 @@
     "dev": "vite",
     "build": "vite build",
     "check:assets": "node scripts/check-assets.mjs",
+    "check:includes": "node scripts/check-includes.mjs",
+    "check:paths": "node scripts/check-paths.mjs",
+    "check:unused": "node scripts/find-unused-assets.mjs",
+    "check:all": "node scripts/check-assets.mjs && node scripts/check-includes.mjs && node scripts/check-paths.mjs",
+    "compress:images": "node scripts/compress-images.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:ci": "npm run test && npm run check:all && npm run build",
     "preview": "vite preview"
   },
   "devDependencies": {

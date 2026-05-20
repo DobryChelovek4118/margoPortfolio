@@ -54,7 +54,6 @@
     .header--menu-open .header__nav .nav__link,
     .header--menu-open .header__nav .header__contact {
         display: inline-block;
-        font-family: 'Involve', sans-serif;
         font-size: var(--font-body);
         font-weight: 700;
         letter-spacing: var(--tracking-base);
@@ -80,9 +79,18 @@
         padding: 0 var(--container-padding-md);
     }
 
+    .hero__title,
+    .hero__location,
+    .hero__year {
+        display: none !important;
+    }
+
     .hero__title {
-        padding-top: var(--hero-padding-top-lg);
-        font-size: var(--font-display-lg-adapt);
+        display: block !important;
+        right: var(--container-padding-md);
+        bottom: 48px;
+        font-size: var(--font-heading-md);
+        line-height: 114%;
     }
 
     .work .container {
@@ -93,7 +101,7 @@
     }
 
     .work {
-        padding-top: var(--space-10xl);
+        padding-top: 0;
         padding-bottom: var(--space-10xl);
     }
 
@@ -184,27 +192,8 @@
         margin-top: calc(var(--space-xl) * 2);
     }
 
-    .experience__title {
-        position: static;
-        max-width: var(--project-content-max-md);
-        font-size: var(--font-heading-md);
-    }
-
-    .experience-card__position {
-        font-size: var(--font-heading-xs);
-    }
-
     .project__title {
         font-size: var(--font-heading-xs);
-    }
-
-    .experience__item,
-    .experience__list {
-        max-width: var(--project-content-max-md);
-    }
-
-    .tool-timeline {
-        max-width: var(--project-content-max-md);
     }
 
     .tool-timeline__row {

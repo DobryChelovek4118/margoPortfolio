@@ -1,3 +1,91 @@
+// ==================== LOADER ====================
+
+function initLoader() {
+    const loader = document.getElementById('page-loader');
+    if (!loader) return;
+
+    // Не показываем лоадер повторно в рамках одной сессии
+    if (sessionStorage.getItem('loaderShown')) {
+        loader.remove();
+        return;
+    }
+
+    const svgPath = document.getElementById('loader-path');
+    if (!svgPath) return;
+
+    const totalLength = svgPath.getTotalLength();
+
+    // Disable transition first so the initial invisible state renders instantly
+    svgPath.style.transition = 'none';
+    svgPath.style.strokeDasharray = totalLength;
+    svgPath.style.strokeDashoffset = totalLength;
+
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    let progress = 0;
+    let dismissed = false;
+    const startTime = Date.now();
+    const minDisplayMs = 1300;
+
+    function setProgress(p) {
+        progress = Math.max(progress, Math.min(1, p));
+        svgPath.style.strokeDashoffset = totalLength * (1 - progress);
+    }
+
+    function hideLoader() {
+        loader.classList.add('loader--hidden');
+        const cleanup = () => {
+            if (loader.parentNode) loader.remove();
+            sessionStorage.setItem('loaderShown', '1');
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+        };
+        loader.addEventListener('transitionend', cleanup, { once: true });
+        setTimeout(cleanup, 700);
+    }
+
+    function doComplete() {
+        clearInterval(fakeTimer);
+        // Use rAF to ensure browser has painted current progress before changing transition
+        requestAnimationFrame(() => {
+            svgPath.style.transition = 'stroke-dashoffset 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+            svgPath.style.strokeDashoffset = '0';
+            setTimeout(hideLoader, 750);
+        });
+    }
+
+    function dismiss() {
+        if (dismissed) return;
+        dismissed = true;
+        const elapsed = Date.now() - startTime;
+        const wait = Math.max(0, minDisplayMs - elapsed);
+        setTimeout(doComplete, wait);
+    }
+
+    // Re-enable smooth transition after the first frame (after initial invisible state is painted)
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            svgPath.style.transition = 'stroke-dashoffset 0.12s linear';
+        });
+    });
+
+    // Asymptotically approach 85% while page loads
+    const fakeTimer = setInterval(() => {
+        const inc = (0.85 - progress) * 0.07 + 0.004;
+        setProgress(progress + inc);
+    }, 50);
+
+    if (document.readyState === 'complete') {
+        dismiss();
+    } else {
+        window.addEventListener('load', dismiss, { once: true });
+        setTimeout(dismiss, 8000);
+    }
+}
+
+initLoader();
+
 // ==================== СТРАНИЦЫ ПРОЕКТОВ: ОТКЛЮЧЕНИЕ КАСТОМНОГО СКРОЛЛА ====================
 const isProjectPage = document.body.classList.contains('page--project');
 
@@ -7,17 +95,12 @@ if (isProjectPage) {
 }
 
 const mail = document.querySelector('.footer__email');
-if (mail) {
-    function revealEmail() {
-        const user = mail.dataset.user;
-        const domain = mail.dataset.domain;
-        mail.href = `mailto:${user}@${domain}`;
-        mail.textContent = `${user}@${domain}`;
-    }
-    mail.addEventListener('mouseenter', revealEmail);
-    mail.addEventListener('focus', revealEmail);
-    mail.addEventListener('click', revealEmail);
-}
+if (mail) mail.addEventListener('click', () => {
+    const user = mail.dataset.user;
+    const domain = mail.dataset.domain;
+    mail.href = `mailto:${user}@${domain}`;
+    mail.textContent = `${user}@${domain}`;
+});
 
 // ==================== ОПРЕДЕЛЕНИЕ МОБИЛЬНОГО УСТРОЙСТВА ====================
 
@@ -51,9 +134,11 @@ const sections = isProjectPage ? [] : [
     document.getElementById('work-1'),
     document.getElementById('work-2'),
     document.getElementById('work-3'),
-    document.querySelector('.experience'),
     document.querySelector('.footer'),
 ].filter(Boolean);
+
+// Отключаем кастомный "слайдовый" скролл на главной — оставляем нативную прокрутку
+const enableCustomScroll = false;
 
 let currentIndex = 0; // Индекс текущей секции
 let isScrolling = false;
@@ -112,7 +197,7 @@ function scrollToSection(index, instant = false) {
         isInSlideMode = true;
         setScrollLock(true);
     } else {
-        // experience, footer
+        // footer
         isInSlideMode = false;
         setScrollLock(false);
     }
@@ -132,7 +217,7 @@ function scrollToSection(index, instant = false) {
 
 // ==================== ИНИЦИАЛИЗАЦИЯ ====================
 
-if (sections.length > 0 && !isSmallScreen && !isProjectPage) {
+if (enableCustomScroll && sections.length > 0 && !isSmallScreen && !isProjectPage) {
     window.addEventListener('load', () => {
         // Проверяем, есть ли якорь в URL
         const hash = window.location.hash.replace('#', '');
@@ -141,7 +226,7 @@ if (sections.length > 0 && !isSmallScreen && !isProjectPage) {
         if (hash === 'work' || hash === 'work-1') targetIndex = 1;
         else if (hash === 'work-2') targetIndex = 2;
         else if (hash === 'work-3') targetIndex = 3;
-        else if (hash === 'about' || hash === 'experience') targetIndex = 4;
+        else if (hash === 'about' || hash === 'experience' || hash === 'footer') targetIndex = 4;
         else {
             targetIndex = getCurrentSectionIndex();
         }
@@ -159,9 +244,10 @@ if (sections.length > 0 && !isSmallScreen && !isProjectPage) {
 
 // ==================== ОБРАБОТКА НАВИГАЦИИ ====================
 
-document.querySelectorAll('a[href^="#"]').forEach(link => {
-    link.addEventListener('click', function (e) {
-        e.preventDefault();
+if (enableCustomScroll) {
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
         const targetId = this.getAttribute('href').replace('#', '');
 
         let targetIndex = -1;
@@ -184,12 +270,13 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
             isScrolling = false;
             scrollToSection(targetIndex);
         }
+        });
     });
-});
+}
 
 // ==================== ОБРАБОТЧИК СКРОЛЛА ====================
 
-if (sections.length > 0 && !isSmallScreen && !isProjectPage) {
+if (enableCustomScroll && sections.length > 0 && !isSmallScreen && !isProjectPage) {
     window.addEventListener(
         'wheel',
         function (e) {
@@ -243,7 +330,7 @@ if (sections.length > 0 && !isSmallScreen && !isProjectPage) {
 
 let scrollTimeout;
 
-if (sections.length > 0 && !isSmallScreen && !isProjectPage) {
+if (enableCustomScroll && sections.length > 0 && !isSmallScreen && !isProjectPage) {
     window.addEventListener('scroll', function () {
         if (isScrolling) return;
 
@@ -300,11 +387,9 @@ if (sections.length > 0 && !isSmallScreen && !isProjectPage) {
 
 // ==================== CURSOR ====================
 
-let cursorInitialized = false;
-
 function initCursor() {
     const cursor = document.querySelector('.cursor');
-
+    
     if (isMobileDevice()) {
         if (cursor) cursor.style.display = 'none';
 
@@ -314,9 +399,6 @@ function initCursor() {
         document.body.style.cursor = 'auto';
         return;
     }
-
-    if (cursorInitialized) return;
-    cursorInitialized = true;
 
     if (cursor) {
         document.addEventListener('mousemove', e => {
@@ -500,7 +582,6 @@ function initProjectMediaModal() {
     modal.className = 'project-media-modal';
     modal.setAttribute('role', 'dialog');
     modal.setAttribute('aria-modal', 'true');
-    modal.setAttribute('aria-label', 'Просмотр медиа');
 
     const inner = document.createElement('div');
     inner.className = 'project-media-modal__inner';
@@ -508,7 +589,6 @@ function initProjectMediaModal() {
     const closeBtn = document.createElement('button');
     closeBtn.className = 'project-media-modal__close';
     closeBtn.type = 'button';
-    closeBtn.setAttribute('aria-label', 'Закрыть');
     closeBtn.innerHTML = '×';
 
     const captionEl = document.createElement('div');
@@ -728,7 +808,172 @@ window.addEventListener('resize', function () {
     }, 250);
 });
 
+// ==================== CSS ====================
+
+const style = document.createElement('style');
+style.textContent = `
+    #hero {
+        height: 100vh !important;
+        min-height: 100vh;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    @media (max-width: 768px), (hover: none) and (pointer: coarse) {
+        .cursor {
+            display: none !important;
+        }
+
+        a, button, [role="button"] {
+            cursor: pointer !important;
+        }
+
+        body {
+            cursor: auto !important;
+        }
+    }
+`;
+document.head.appendChild(style);
 
 initProjectMediaFallback();
 initHomeMediaFallback();
 initProjectMediaModal();
+
+// ==================== HOME: WORK-1 SCREENS ANIMATION ====================
+
+function initWork1ScreensAnimation() {
+    if (isProjectPage) return;
+    // На планшете и мобильном показываем скриншоты сразу, без анимации
+    if (window.innerWidth <= 1024) return;
+
+    const section = document.getElementById('work-1');
+    const container = document.querySelector('.work-1-screens');
+    if (!section || !container) return;
+
+    const screens = Array.from(container.querySelectorAll('.work-1-screens__img'));
+    if (!screens.length) return;
+
+    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+    if (prefersReducedMotion) {
+        screens.forEach(img => img.classList.add('is-visible'));
+        return;
+    }
+
+    container.dataset.animate = 'true';
+    let animated = false;
+
+    function triggerAnimation() {
+        if (animated) return;
+        animated = true;
+        screens.forEach((img, i) => {
+            setTimeout(() => img.classList.add('is-visible'), i * 240);
+        });
+    }
+
+    function onScroll() {
+        const rect = section.getBoundingClientRect();
+        // Запускаем когда верх секции почти достиг верха экрана (≈ высота хедера)
+        if (rect.top < 80) {
+            triggerAnimation();
+            window.removeEventListener('scroll', onScroll);
+        }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    setTimeout(onScroll, 50);
+}
+
+initWork1ScreensAnimation();
+
+// ==================== HOME: WORK-2 SCREENS ANIMATION ====================
+
+function initWork2ScreensAnimation() {
+    if (isProjectPage) return;
+    if (window.innerWidth <= 1024) return;
+
+    const container = document.querySelector('.work-2-screens');
+    if (!container) return;
+    const section = container.closest('.project--cover');
+    if (!section) return;
+
+    const screens = Array.from(container.querySelectorAll('.work-2-screens__img'));
+    if (!screens.length) return;
+
+    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+    if (prefersReducedMotion) {
+        screens.forEach(img => img.classList.add('is-visible'));
+        return;
+    }
+
+    container.dataset.animate = 'true';
+    let animated = false;
+
+    function triggerAnimation() {
+        if (animated) return;
+        animated = true;
+        screens.forEach((img, i) => {
+            setTimeout(() => img.classList.add('is-visible'), i * 240);
+        });
+    }
+
+    function onScroll() {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < 80) {
+            triggerAnimation();
+            window.removeEventListener('scroll', onScroll);
+        }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    setTimeout(onScroll, 50);
+}
+
+initWork2ScreensAnimation();
+
+// ==================== HOME: WORK-3 SCREENS ANIMATION ====================
+
+function initWork3ScreensAnimation() {
+    if (isProjectPage) return;
+    if (window.innerWidth <= 1024) return;
+
+    const container = document.querySelector('.work-3-screens');
+    if (!container) return;
+    const section = container.closest('.project--cover');
+    if (!section) return;
+
+    const screens = Array.from(container.querySelectorAll('.work-3-screens__img'));
+    if (!screens.length) return;
+
+    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+    if (prefersReducedMotion) {
+        screens.forEach(img => img.classList.add('is-visible'));
+        return;
+    }
+
+    container.dataset.animate = 'true';
+    let animated = false;
+
+    function triggerAnimation() {
+        if (animated) return;
+        animated = true;
+        // 2-й скриншот появляется первым, затем 1-й и 3-й одновременно
+        setTimeout(() => screens[1].classList.add('is-visible'), 0);
+        setTimeout(() => screens[0].classList.add('is-visible'), 240);
+        setTimeout(() => screens[2].classList.add('is-visible'), 240);
+    }
+
+    function onScroll() {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < 80) {
+            triggerAnimation();
+            window.removeEventListener('scroll', onScroll);
+        }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    setTimeout(onScroll, 50);
+}
+
+initWork3ScreensAnimation();

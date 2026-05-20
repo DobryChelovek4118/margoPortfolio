@@ -23,39 +23,23 @@
         grid-template-columns: 1fr auto;
     }
 
-    .hero__title {
-        padding-top: var(--hero-padding-top-md);
-        font-size: var(--font-heading-lg);
-    }
-
+    .hero__title,
     .hero__location,
     .hero__year {
-        position: static;
-        margin-top: var(--space-xl);
-        display: block;
+        display: none !important;
     }
 
-    .hero__year {
-        text-align: left;
+    .hero__title {
+        display: block !important;
+        right: var(--container-padding-sm);
+        bottom: 36px;
+        font-size: var(--font-heading-sm);
+        line-height: 114%;
+        max-width: min(22ch, calc(100vw - (var(--container-padding-sm) * 2)));
     }
 
     .project__title {
         font-size: var(--font-heading-sm);
-    }
-
-    .tool-timeline__row {
-        grid-template-columns: 1fr;
-        gap: var(--space-base);
-        align-items: start;
-    }
-
-    .tool-timeline__period {
-        font-size: var(--font-heading-xs);
-    }
-
-    .tool-timeline__icon {
-        width: 40px;
-        height: 40px;
     }
 
     .project__text {
@@ -65,7 +49,6 @@
     .project__more-link {
         display: inline-block;
         margin-top: var(--space-xl);
-        font-family: 'Involve', sans-serif;
         font-weight: 700;
         font-size: var(--font-body);
         letter-spacing: var(--tracking-base);

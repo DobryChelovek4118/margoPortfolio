@@ -1,89 +1,22 @@
 import path from 'path'
 import fs from 'fs'
 import { fileURLToPath } from 'url'
-import sharp from 'sharp'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-function webpBuildPlugin() {
-    const imageExtRegex = /\.(png|jpg|jpeg)$/i
-
-    function toWebpPath(filePath) {
-        return filePath.replace(imageExtRegex, '.webp')
+function getRollupInputs() {
+    const inputs = {
+        main: path.resolve(__dirname, 'index.html'),
     }
+    const projectsDir = path.resolve(__dirname, 'projects')
+    if (!fs.existsSync(projectsDir)) return inputs
 
-    async function ensureWebpForFile(absPath) {
-        if (!imageExtRegex.test(absPath)) return
-        const webpPath = toWebpPath(absPath)
-        if (fs.existsSync(webpPath)) return
-        await sharp(absPath).webp({ quality: 82 }).toFile(webpPath)
+    for (const file of fs.readdirSync(projectsDir)) {
+        if (!file.endsWith('.html') || !file.startsWith('project-')) continue
+        const key = file.replace(/^project-/, '').replace(/\.html$/, '').replace(/-/g, '')
+        inputs[key] = path.join(projectsDir, file)
     }
-
-    function walkDir(dir, files = []) {
-        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-            const abs = path.join(dir, entry.name)
-            if (entry.isDirectory()) walkDir(abs, files)
-            else files.push(abs)
-        }
-        return files
-    }
-
-    function copyDir(srcDir, destDir) {
-        if (!fs.existsSync(srcDir)) return
-        fs.mkdirSync(destDir, { recursive: true })
-        for (const entry of fs.readdirSync(srcDir, { withFileTypes: true })) {
-            const srcPath = path.join(srcDir, entry.name)
-            const destPath = path.join(destDir, entry.name)
-            if (entry.isDirectory()) copyDir(srcPath, destPath)
-            else fs.copyFileSync(srcPath, destPath)
-        }
-    }
-
-    function replaceImgUrlsToWebp(html) {
-        // Replace only when the corresponding .webp exists.
-        // Supports absolute (/img/...) and relative (../img/...) paths.
-        return html.replace(/(["'])([^"']+\.(?:png|jpg|jpeg))\1/gi, (m, quote, url) => {
-            const normalized = url.split('?')[0].split('#')[0]
-            const abs = normalized.startsWith('/')
-                ? path.resolve(__dirname, `.${normalized}`)
-                : path.resolve(__dirname, normalized)
-            const webpAbs = toWebpPath(abs)
-            if (!fs.existsSync(webpAbs)) return m
-            const webpUrl = url.replace(imageExtRegex, '.webp')
-            return `${quote}${webpUrl}${quote}`
-        })
-    }
-
-    return {
-        name: 'webp-build',
-        apply: 'build',
-        async buildStart() {
-            const imgDir = path.resolve(__dirname, 'img')
-            if (fs.existsSync(imgDir)) {
-                const allFiles = walkDir(imgDir)
-                for (const absPath of allFiles) {
-                    // eslint-disable-next-line no-await-in-loop
-                    await ensureWebpForFile(absPath)
-                }
-            }
-
-            // Копируем ассеты в dist/, чтобы они реально попали на прод
-            const outDir = path.resolve(__dirname, 'dist')
-            if (fs.existsSync(imgDir)) {
-                copyDir(imgDir, path.join(outDir, 'img'))
-            }
-            const resourceDir = path.resolve(__dirname, 'resource')
-            if (fs.existsSync(resourceDir)) {
-                copyDir(resourceDir, path.join(outDir, 'resource'))
-            }
-        },
-        transformIndexHtml: {
-            order: 'pre',
-            handler(html) {
-                return replaceImgUrlsToWebp(html)
-            },
-        },
-    }
+    return inputs
 }
 
 function htmlIncludePlugin() {
@@ -113,7 +46,8 @@ function htmlIncludePlugin() {
             const isPartial = file.includes(`${path.sep}src${path.sep}partials${path.sep}`)
             const isHtml = file.endsWith('.html')
             const isCss = file.endsWith('.css')
-            if (isPartial || isHtml || isCss) {
+            const isJs = file.endsWith('.js') && file.includes(`${path.sep}js${path.sep}`)
+            if (isPartial || isHtml || isCss || isJs) {
                 server.ws.send({ type: 'full-reload' })
                 return []
             }
@@ -123,15 +57,10 @@ function htmlIncludePlugin() {
 
 export default {
     base: '/',
-    plugins: [webpBuildPlugin(), htmlIncludePlugin()],
+    plugins: [htmlIncludePlugin()],
     build: {
         rollupOptions: {
-            input: {
-                main: path.resolve(__dirname, 'index.html'),
-                crm: path.resolve(__dirname, 'projects/project-crm.html'),
-                ecomm: path.resolve(__dirname, 'projects/project-e-comm.html'),
-                miniapp: path.resolve(__dirname, 'projects/project-mini-app.html'),
-            },
+            input: getRollupInputs(),
         },
     },
 }
