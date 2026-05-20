@@ -351,7 +351,7 @@ body {
     /* Та же сетка, что у .layout в шапке: aside + main */
     grid-template-columns: var(--layout-aside) minmax(0, 1fr);
     gap: var(--layout-gap);
-    align-items: stretch;
+    align-items: start;
     border-radius: 8px;
 }
 
@@ -360,285 +360,17 @@ body {
     display: block;
     width: 100%;
     min-width: 0;
-    min-height: 360px;
-    aspect-ratio: 4 / 3;
     border-radius: 8px;
     overflow: hidden;
-}
-
-.project__cover-media--placeholder {
     background: var(--color-border-light);
+    line-height: 0;
 }
 
-/* Фон первого кейса */
-#work-1 .project__cover-media--placeholder {
-    background: url('/img/shared/work-e-comm-loop.webp') center center / cover no-repeat;
-}
-
-@media (max-width: 1024px) {
-    #work-1 .project__cover-media--placeholder {
-        background: url('/img/shared/work-e-comm-loop-mobile.webp') center center / cover no-repeat;
-    }
-}
-
-/* Фон второго кейса (Маркетплейс) */
-#work-2 .project__cover-media--placeholder {
-    background: url('/img/shared/work-marketplace-loop.webp') center center / cover no-repeat;
-}
-
-@media (max-width: 1024px) {
-    #work-2 .project__cover-media--placeholder {
-        background: url('/img/shared/work-marketplace-loop-mobile.webp') center center / cover no-repeat;
-    }
-}
-
-/* Фон третьего кейса (Провайдеры) */
-#work-3 .project__cover-media--placeholder {
-    background: url('/img/shared/work-providers-loop.webp') center center / cover no-repeat;
-}
-
-@media (max-width: 1024px) {
-    #work-3 .project__cover-media--placeholder {
-        background: url('/img/shared/work-providers-loop-mobile.webp') center center / cover no-repeat;
-    }
-}
-
-
-.work-1-screens {
-    position: absolute;
-    left: var(--container-inset);
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: row;
-    gap: 64px;
-    z-index: 0; /* под плашкой */
-    pointer-events: none;
-}
-
-.work-1-screens__img {
-    width: 300px;
-    height: auto;
+.project__cover-img {
     display: block;
-    opacity: 1;
-    transform: none;
-    position: relative;
-    pointer-events: auto;
-}
-
-/* Анимация включается только если JS успешно инициализировался */
-.work-1-screens[data-animate="true"] .work-1-screens__img {
-    opacity: 0;
-    transform: translateX(-60px);
-    transition:
-        opacity 0.6s ease,
-        transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    will-change: opacity, transform;
-}
-
-.work-1-screens[data-animate="true"] .work-1-screens__img.is-visible {
-    opacity: 1;
-    transform: translateX(0);
-    transition:
-        opacity 0.6s ease,
-        transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* Hover только на устройствах с мышью (не тач) */
-@media (hover: hover) and (pointer: fine) {
-    .work-1-screens[data-animate="true"] .work-1-screens__img.is-visible:hover {
-        transform: scale(1.1) rotate(2deg);
-        transition: transform 0.3s ease;
-        z-index: 2;
-    }
-
-    .work-1-screens[data-animate="true"] .work-1-screens__img.is-visible:nth-child(2):hover {
-        transform: scale(1.1) rotate(-2deg);
-    }
-}
-
-@media (max-width: 1024px) {
-    .work-1-screens {
-        left: 50%;
-        top: 72px; /* начинаем сразу под хедером */
-        transform: translateX(-50%); /* только горизонтальное центрирование */
-        justify-content: center;
-        gap: 20px;
-    }
-
-    .work-1-screens__img {
-        /* ширина через vw: 3 картинки + отступы вписываются в экран */
-        width: clamp(140px, 27vw, 220px);
-    }
-
-    /* Без анимации — показываем сразу */
-    .work-1-screens[data-animate="true"] .work-1-screens__img {
-        opacity: 1;
-        transform: none;
-        transition: none;
-    }
-}
-
-@media (max-width: 640px) {
-    .work-1-screens {
-        gap: 12px;
-    }
-
-    .work-1-screens__img {
-        width: clamp(100px, 28vw, 140px);
-    }
-}
-
-/* ==================== WORK-2 SCREENS ==================== */
-
-.work-2-screens {
-    position: absolute;
-    left: var(--container-inset);
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    z-index: 0;
-    pointer-events: none;
-}
-
-.work-2-screens__img {
-    width: 884px;
-    height: auto;
-    display: block;
-    opacity: 1;
-    transform: none;
-    position: relative;
-    pointer-events: auto;
-}
-
-.work-2-screens[data-animate="true"] .work-2-screens__img {
-    opacity: 0;
-    transform: translateY(-40px);
-    transition:
-        opacity 0.7s ease,
-        transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    will-change: opacity, transform;
-}
-
-.work-2-screens[data-animate="true"] .work-2-screens__img.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-@media (hover: hover) and (pointer: fine) {
-    .work-2-screens[data-animate="true"] .work-2-screens__img.is-visible:hover {
-        transform: scale(1.05) rotate(1.5deg);
-        transition: transform 0.3s ease;
-        z-index: 2;
-    }
-}
-
-@media (max-width: 1024px) {
-    .work-2-screens {
-        left: 50%;
-        top: 72px;
-        transform: translateX(-50%);
-    }
-
-    .work-2-screens__img {
-        width: clamp(260px, 70vw, 500px);
-    }
-
-    .work-2-screens[data-animate="true"] .work-2-screens__img {
-        opacity: 1;
-        transform: none;
-        transition: none;
-    }
-}
-
-/* ==================== WORK-3 SCREENS ==================== */
-
-.work-3-screens {
-    position: absolute;
-    left: var(--container-inset);
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: row;
-    gap: 64px;
-    z-index: 0;
-    pointer-events: none;
-}
-
-.work-3-screens__img {
-    width: 300px;
-    height: auto;
-    display: block;
-    opacity: 1;
-    transform: none;
-    position: relative;
-    pointer-events: auto;
-}
-
-.work-3-screens[data-animate="true"] .work-3-screens__img {
-    opacity: 0;
-    transform: translateY(60px);
-    transition:
-        opacity 0.6s ease,
-        transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    will-change: opacity, transform;
-}
-
-.work-3-screens[data-animate="true"] .work-3-screens__img.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-    transition:
-        opacity 0.6s ease,
-        transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-@media (hover: hover) and (pointer: fine) {
-    .work-3-screens[data-animate="true"] .work-3-screens__img.is-visible:hover {
-        transform: scale(1.1) rotate(2deg);
-        transition: transform 0.3s ease;
-        z-index: 2;
-    }
-
-    .work-3-screens[data-animate="true"] .work-3-screens__img.is-visible:nth-child(2):hover {
-        transform: scale(1.1) rotate(-2deg);
-    }
-}
-
-@media (max-width: 1024px) {
-    .work-3-screens {
-        left: 50%;
-        top: 72px;
-        transform: translateX(-50%);
-        justify-content: center;
-        gap: 20px;
-    }
-
-    .work-3-screens__img {
-        width: clamp(140px, 27vw, 220px);
-    }
-
-    .work-3-screens[data-animate="true"] .work-3-screens__img {
-        opacity: 1;
-        transform: none;
-        transition: none;
-    }
-}
-
-@media (max-width: 640px) {
-    .work-3-screens {
-        gap: 12px;
-    }
-
-    .work-3-screens__img {
-        width: clamp(100px, 28vw, 140px);
-    }
-}
-
-.project__cover-media video {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+    height: auto;
+    max-width: 100%;
 }
 
 .project__cover-content {
@@ -654,7 +386,7 @@ body {
     padding: 0;
     background: transparent;
     border-radius: 0;
-    align-self: center;
+    align-self: start;
 }
 
 .work #work-1 {
@@ -814,19 +546,6 @@ body {
         order: 2;
     }
 
-    .project__cover-media {
-        min-height: 220px;
-        max-height: min(56vh, 480px);
-        aspect-ratio: 16 / 10;
-    }
-
-    #work-1 .project__cover-media--placeholder,
-    #work-2 .project__cover-media--placeholder,
-    #work-3 .project__cover-media--placeholder {
-        background-size: cover;
-        background-position: center;
-    }
-
     .project--cover .project__cover-content {
         position: relative;
         left: auto;
@@ -841,12 +560,6 @@ body {
 
     .work .project.project--cover + .project.project--cover {
         margin-top: var(--space-12xl);
-    }
-}
-
-@media (max-width: 768px) {
-    .project__cover-media {
-        max-height: min(50vh, 400px);
     }
 }
 
@@ -893,11 +606,6 @@ body {
         text-align: left;
     }
 
-    .project--cover .project__cover-media {
-        min-height: 0;
-        aspect-ratio: unset;
-        height: var(--work-cover-media-height, auto);
-    }
 }
 
 .work .project.project--cover + .project.project--cover {

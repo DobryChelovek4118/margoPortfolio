@@ -528,6 +528,7 @@ function initHomeMediaFallback() {
     function showHomePlaceholder(mediaEl) {
         const wrapper =
             mediaEl.closest('.project__media') ||
+            mediaEl.closest('.project__cover-media') ||
             mediaEl.parentElement;
         if (!wrapper) return;
 
@@ -555,7 +556,7 @@ function initHomeMediaFallback() {
         wrapper.appendChild(placeholder);
     }
 
-    const images = document.querySelectorAll('.work .project__media img');
+    const images = document.querySelectorAll('.work .project__media img, .project--cover .project__cover-img');
     images.forEach(img => {
         img.addEventListener('error', () => showHomePlaceholder(img));
     });
@@ -840,69 +841,6 @@ document.head.appendChild(style);
 initProjectMediaFallback();
 initHomeMediaFallback();
 initProjectMediaModal();
-
-// ==================== HOME: COVER MEDIA HEIGHT (3 кейса) ====================
-
-function initWorkCoverMediaHeights() {
-    if (isProjectPage) return;
-
-    const contents = Array.from(document.querySelectorAll('.project--cover .project__cover-content'));
-    const medias = Array.from(document.querySelectorAll('.project--cover .project__cover-media'));
-    if (!contents.length || contents.length !== medias.length) return;
-
-    let resizeTimer;
-
-    function clearSyncedHeights() {
-        document.documentElement.style.removeProperty('--work-cover-media-height');
-        medias.forEach(media => {
-            media.style.height = '';
-            media.style.minHeight = '';
-        });
-    }
-
-    function syncHeights() {
-        if (window.innerWidth <= 1024) {
-            clearSyncedHeights();
-            return;
-        }
-
-        const maxHeight = Math.max(
-            0,
-            ...contents.map(el => Math.ceil(el.getBoundingClientRect().height)),
-        );
-
-        if (maxHeight <= 0) return;
-
-        const heightPx = `${maxHeight}px`;
-        document.documentElement.style.setProperty('--work-cover-media-height', heightPx);
-        medias.forEach(media => {
-            media.style.height = heightPx;
-            media.style.minHeight = heightPx;
-        });
-    }
-
-    function scheduleSync() {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(syncHeights, 50);
-    }
-
-    syncHeights();
-
-    if (typeof ResizeObserver !== 'undefined') {
-        const observer = new ResizeObserver(scheduleSync);
-        contents.forEach(el => observer.observe(el));
-    }
-
-    window.addEventListener('resize', scheduleSync);
-
-    if (document.fonts?.ready) {
-        document.fonts.ready.then(syncHeights).catch(() => {});
-    }
-
-    window.addEventListener('load', syncHeights, { once: true });
-}
-
-initWorkCoverMediaHeights();
 
 // ==================== HOME: WORK-1 SCREENS ANIMATION ====================
 
