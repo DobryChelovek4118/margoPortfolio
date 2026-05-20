@@ -20,9 +20,15 @@ npm run preview    # предпросмотр собранной версии
 | Секция | Файл |
 |--------|------|
 | Заголовок | `src/partials/index/hero.html` |
-| Карточки проектов | `src/partials/index/work.html` |
+| Работы | `src/partials/index/work.html` |
 | Блог / соцсети | `src/partials/index/blog.html` |
 | Контакты (футер) | `src/partials/footer-main.html` |
+
+**Навигация:** B2C → `#work-1` (три cover-кейса), B2E → `#directions`.
+
+**`work.html`:**
+- **B2C** — `#work-1` … `#work-3`: cover-карточки (текст слева, превью справа; на мобилке — картинка сверху). Мета: дата + результаты (список).
+- **B2E** — `#work-4` CRM, `#work-5` дизайн-система, `#work-6` ERM. Mini App (`project-mini-app.html`) на главной **не показывается**, проект в репозитории есть.
 
 ### Страницы проектов
 
@@ -34,7 +40,7 @@ npm run preview    # предпросмотр собранной версии
 | Маркетплейс (work-2) | `projects/project-marketplace.html` | `src/partials/projects/marketplace/` |
 | Провайдеры (work-3) | `projects/project-providers.html` | `src/partials/projects/providers/` |
 | CRM | `projects/project-crm.html` | `src/partials/projects/crm/` |
-| Mini App | `projects/project-mini-app.html` | `src/partials/projects/mini-app/` |
+| Mini App (не на главной) | `projects/project-mini-app.html` | `src/partials/projects/mini-app/` |
 | ERM | `projects/project-erm.html` | `src/partials/projects/erm/` |
 | Дизайн-система | `projects/project-design-system.html` | `src/partials/projects/design-system/` |
 
@@ -194,6 +200,7 @@ Vanilla HTML/CSS/JS + **Vite** как сборщик. Нет фреймворк�
 - В dev/build Vite обрабатывает скрипт как ES‑модуль (граф сборки, попадание в `dist/`).
 - При сохранении `js/script.js` срабатывает full reload (см. `handleHotUpdate` в `vite.config.js`).
 - Логика лоадера: `initLoader()` в начале файла, разметка — `src/partials/loader.html`.
+- Главная: `initWorkCoverMediaHeights()` — на десктопе (≥1025px) выравнивает высоту превью трёх B2C-кейсов по самому высокому текстовому блоку.
 
 ---
 
