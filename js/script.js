@@ -529,6 +529,7 @@ function initHomeMediaFallback() {
         const wrapper =
             mediaEl.closest('.project__media') ||
             mediaEl.closest('.project__cover-media') ||
+            mediaEl.closest('.motion__video-wrap') ||
             mediaEl.parentElement;
         if (!wrapper) return;
 
@@ -561,13 +562,36 @@ function initHomeMediaFallback() {
         img.addEventListener('error', () => showHomePlaceholder(img));
     });
 
-    const videos = document.querySelectorAll('.work .project__media video');
+    const videos = document.querySelectorAll('.work .project__media video, .motion__video');
     videos.forEach(video => {
         const onError = () => showHomePlaceholder(video);
         video.addEventListener('error', onError);
         video.addEventListener('stalled', onError);
         video.addEventListener('abort', onError);
     });
+}
+
+function initMotionVideo() {
+    if (isProjectPage) return;
+
+    const section = document.getElementById('motion');
+    if (!section) return;
+
+    const video = section.querySelector('.motion__video');
+    const trigger = section.querySelector('.motion__trigger');
+    if (!video || !trigger) return;
+
+    function startMotionPlayback() {
+        if (section.classList.contains('motion--started')) return;
+        section.classList.add('motion--started');
+        video.controls = true;
+        video.play().catch(() => {
+            // Если автозапуск после клика заблокирован, оставляем controls для ручного старта
+        });
+    }
+
+    trigger.addEventListener('click', startMotionPlayback);
+    video.addEventListener('click', startMotionPlayback, { once: true });
 }
 
 // ==================== MEDIA MODAL ====================
@@ -841,6 +865,7 @@ document.head.appendChild(style);
 initProjectMediaFallback();
 initHomeMediaFallback();
 initProjectMediaModal();
+initMotionVideo();
 
 // ==================== HOME: WORK-1 SCREENS ANIMATION ====================
 

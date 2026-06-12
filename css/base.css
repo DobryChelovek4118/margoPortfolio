@@ -56,6 +56,7 @@ body {
 #work-1,
 #work-2,
 #work-3,
+#motion,
 .footer {
     scroll-margin-top: var(--header-height);
 }
@@ -619,6 +620,58 @@ body {
 .blog {
     padding: var(--section-padding-y) 0 var(--section-padding-bottom);
     margin: var(--space-12xl) 0;
+}
+
+.motion {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    margin-bottom: var(--space-8xl);
+}
+
+.motion__video-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    overflow: hidden;
+}
+
+.motion__video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0 !important;
+}
+
+.motion__trigger {
+    position: absolute;
+    inset: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: rgba(0, 0, 0, 0.35);
+    color: var(--color-white);
+    font-family: 'VelaSans', sans-serif;
+    font-size: var(--font-heading-xs);
+    font-weight: 700;
+    letter-spacing: var(--tracking-base);
+    transition: opacity 0.25s ease;
+}
+
+.motion__trigger-icon {
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 12px solid currentColor;
+}
+
+.motion--started .motion__trigger {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .work .project + .project {
